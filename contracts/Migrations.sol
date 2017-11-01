@@ -1,7 +1,10 @@
 pragma solidity ^0.4.2;
 
 contract Migrations {
+  // First variable is the wallet address - set in constructor 
   address public owner;
+  
+  // uint = unsigned int 
   uint public last_completed_migration;
 
   modifier restricted() {
