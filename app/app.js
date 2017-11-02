@@ -15,7 +15,7 @@ import { default as contract } from 'truffle-contract'
  * https://gist.github.com/maheshmurthy/f6e96d6b3fff4cd4fa7f892de8a1a1b4#file-index-js
  */
 
-import voting_artifacts from '../../build/contracts/Voting.json'
+import voting_artifacts from '../build/contracts/Voting.json'
 
 var Voting = contract(voting_artifacts);
 

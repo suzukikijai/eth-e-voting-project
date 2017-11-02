@@ -5,6 +5,9 @@
   <meta charset="utf-8"/>
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
   <link href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' rel='stylesheet' type='text/css'>
+  <script src="https://cdn.rawgit.com/ethereum/web3.js/develop/dist/web3.js"></script>
+  <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"></script>
+  <script src="./app.js"></script>
 </head>
 <body class="container">
   <h1>Riksdagsvalet 2018</h1>
@@ -34,9 +37,6 @@
     </table>
   </div>
   <input type="text" id="candidate" />
-  <a href="#" onclick="voteForCandidate()" class="btn btn-primary">Rösta</a>
+  <a href="#" id="vote" class="btn btn-primary">Rösta</a>
 </body>
-<script src="https://cdn.rawgit.com/ethereum/web3.js/develop/dist/web3.js"></script>
-<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"></script>
-<script src="./index.js"></script>
 </html>

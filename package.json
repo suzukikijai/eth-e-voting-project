@@ -33,5 +33,5 @@
     "web3": "^0.18.4",
     "webpack": "^2.7.0",
     "webpack-dev-server": "^2.9.3"
-  },
+  }
 }
