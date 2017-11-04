@@ -15,20 +15,13 @@ import { default as contract } from 'truffle-contract'
  * https://gist.github.com/maheshmurthy/f6e96d6b3fff4cd4fa7f892de8a1a1b4#file-index-js
  */
 
-import ballot_artifacts from '../build/contracts/Ballot.json'
+import voting_artifacts from '../build/contracts/Voting.json'
 
-var Ballot = contract(ballot_artifacts);
+var Voting = contract(voting_artifacts);
 
-let proposals = {"Göran Persson": "candidate-1", "Anders Borg": "candidate-2", "Blankt": "candidate-3"}
+let candidates = {"Göran Persson": "candidate-1", "Anders Borg": "candidate-2", "Blankt": "candidate-3"}
 
-window.vote = function(proposal) {
-
-  // Authorize voter - get voter address from login 
-  var voterAddress = web3.eth.accounts[0];
-  Ballot.deployed().then(function(contractInstance){
-    contractInstance.giveRightToVote(voterAddress)
-    window.alert('success');
-  } );
+window.voteForCandidate = function(candidate) {
   let candidateName = $("#candidate").val();
   try {
     $("#msg").html("Vote has been submitted. The vote count will increment as soon as the vote is recorded on the blockchain. Please wait.")
@@ -38,7 +31,15 @@ window.vote = function(proposal) {
      * in Truffle returns a promise which is why we have used then()
      * everywhere we have a transaction call
      */
-
+    Voting.deployed().then(function(contractInstance) {
+      contractInstance.voteForCandidate(candidateName, {gas: 140000, from: web3.eth.accounts[0]}).then(function() {
+        let div_id = candidates[candidateName];
+        return contractInstance.totalVotesFor.call(candidateName).then(function(v) {
+          $("#" + div_id).html(v.toString());
+          $("#msg").html("");
+        });
+      });
+    });
   } catch (err) {
     console.log(err);
   }
@@ -55,15 +56,14 @@ $( document ).ready(function() {
     window.web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
   }
 
-  Ballot.setProvider(web3.currentProvider);
-  let proposals2 = Object.keys(proposals);
-  for (var i = 0; i < proposals2.length; i++) {
-    let name = proposals2[i];
-
-    //Ballot.deployed().then(function(contractInstance) {
-      //contractInstance.totalVotesFor.call(name).then(function(v) {
-       // $("#" + proposals2[name]).html(v.toString());
-      //});
-    //})
+  Voting.setProvider(web3.currentProvider);
+  let candidateNames = Object.keys(candidates);
+  for (var i = 0; i < candidateNames.length; i++) {
+    let name = candidateNames[i];
+    Voting.deployed().then(function(contractInstance) {
+      contractInstance.totalVotesFor.call(name).then(function(v) {
+        $("#" + candidates[name]).html(v.toString());
+      });
+    })
   }
 });
