@@ -55,7 +55,7 @@ contract Ballot {
         // called incorrectly. But watch out, this
         // will currently also consume all provided gas
         // (this is planned to change in the future).
-        //require((msg.sender == chairperson) && !voters[voter].voted && (voters[voter].weight == 0));
+        require((msg.sender == chairperson) && !voters[voter].voted && (voters[voter].weight == 0));
         voters[voter].weight = 1;
     }
 

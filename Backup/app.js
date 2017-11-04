@@ -33,11 +33,6 @@ window.voteForCandidate = function(candidate) {
      */
     Voting.deployed().then(function(contractInstance) {
       contractInstance.voteForCandidate(candidateName, {gas: 140000, from: web3.eth.accounts[0]}).then(function() {
-        let div_id = candidates[candidateName];
-        return contractInstance.totalVotesFor.call(candidateName).then(function(v) {
-          $("#" + div_id).html(v.toString());
-          $("#msg").html("");
-        });
       });
     });
   } catch (err) {
