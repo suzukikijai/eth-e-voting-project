@@ -18,7 +18,6 @@ import { default as contract } from 'truffle-contract'
 import ballot_artifacts from '../build/contracts/Ballot.json'
 
 var Ballot = contract(ballot_artifacts);
-
 let candidates = {"Göran Persson": "candidate-1", "Anders Borg": "candidate-2", "Blankt": "candidate-3"}
 
 $( document ).ready(function() {
@@ -36,7 +35,6 @@ $( document ).ready(function() {
   let proposals2 = Object.keys(candidates);
   for (var i = 0; i < proposals2.length; i++) {
     let name = proposals2[i];
-
     //Ballot.deployed().then(function(contractInstance) {
       //contractInstance.totalVotesFor.call(name).then(function(v) {
        // $("#" + proposals2[name]).html(v.toString());
@@ -46,12 +44,11 @@ $( document ).ready(function() {
 
   // Initate election
   $( "#startElection" ).click(function(){
-    
     Ballot.deployed().then(function(contractInstance){
       // Set timer for election here 
       web3.eth.defaultAccount = web3.eth.accounts[0];
       contractInstance.startElection(60, {from: web3.eth.defaultAccount})
-      window.alert("Val öppet för röster i: " + 60 + " sekunder")
+      window.alert("Val öppet för röster i: " + 30 + " sekunder")
     })
   });
 
@@ -80,7 +77,6 @@ $( document ).ready(function() {
         contractInstance.giveRightToVote(inputAddress, {from: web3.eth.defaultAccount})
         // Cast the vote 
         contractInstance.vote(votedProposal, {from: inputAddress}) // Change to real candidate
-       
           $("#msg").html("Vote has been submitted. The vote count will increment as soon as the vote is recorded on the blockchain. Please wait.")
           $("#candidate").val("");
           $("#voteraddress").val("");
@@ -94,17 +90,16 @@ $( document ).ready(function() {
           console.log(err);
         }
     });
-
   });
 
   // When result is collected 
   $( "#results" ).click(function(){
     Ballot.deployed().then(function(contractInstance){
       // Get winner 
-      contractInstance.winnerName.call().then(function(winnerTitle){
+      //contractInstance.winnerName.call().then(function(winnerTitle){
         // Convert from bytes32 
-        window.alert("Vinnaren är: " + web3.toAscii(winnerTitle));
-      })
+       // window.alert("Vinnaren är: " + web3.toAscii(winnerTitle));
+      //})
       // Get number of votes of candidate 
       let candidateNames = Object.keys(candidates);
       for (var i = 0; i < candidateNames.length; i++) {
@@ -113,8 +108,7 @@ $( document ).ready(function() {
             $("#" + candidates[name]).html(numberOfVotes.toString());
           });
         }
-     
-
+    
       // Get a specific users vote by address -- change from input to automaticly use sender address 
       contractInstance.getVotersVote.call($("#voteraddress").val()).then(function(proposalTitle){
         $("userVote").val("");
@@ -123,5 +117,4 @@ $( document ).ready(function() {
       });
     });
   });
-
 });

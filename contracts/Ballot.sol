@@ -47,12 +47,13 @@ contract Ballot {
     }
     // Function to start an election by setting end time in epoch-seconds
     function startElection(uint duration){
-        if(msg.sender != chairperson) throw;
+        require(msg.sender == chairperson);
         electionEndTime = block.timestamp + duration;
     }
 
     // This function returns the total votes a candidate has received so far
     function totalVotesFor(uint proposal) returns (uint numberOfVotes) {
+        require(block.timestamp > electionEndTime);
         numberOfVotes = proposals[proposal].voteCount;
     }
 
@@ -77,6 +78,7 @@ contract Ballot {
         if (electionEndTime > block.timestamp){
             Voter storage sender = voters[msg.sender];
             require(!sender.voted);
+        
             sender.voted = true;
             sender.vote = proposal;
 
@@ -115,7 +117,8 @@ contract Ballot {
     // returns the name of the winner
     function winnerName() constant
             returns (bytes32 winnerTitle)
-    {
+    {   
+        require(block.timestamp > electionEndTime);
         winnerTitle = proposals[winningProposal()].name;
     }
 }
