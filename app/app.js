@@ -44,6 +44,17 @@ $( document ).ready(function() {
     //})
   }
 
+  // Initate election
+  $( "#startElection" ).click(function(){
+    
+    Ballot.deployed().then(function(contractInstance){
+      // Set timer for election here 
+      web3.eth.defaultAccount = web3.eth.accounts[0];
+      contractInstance.startElection(60, {from: web3.eth.defaultAccount})
+      window.alert("Val öppet för röster i: " + 60 + " sekunder")
+    })
+  });
+
   // When user clicks vote
   $( "#vote" ).click(function(){
       // Authorize voter - get voter address from login 
@@ -91,11 +102,10 @@ $( document ).ready(function() {
     Ballot.deployed().then(function(contractInstance){
       // Get winner 
       contractInstance.winnerName.call().then(function(winnerTitle){
-        
-        //window.alert(winnerTitle);
+        // Convert from bytes32 
+        window.alert("Vinnaren är: " + web3.toAscii(winnerTitle));
       })
       // Get number of votes of candidate 
-      contractInstance.totalVotesFor.call(0).then(function(numberOfVotes){
       let candidateNames = Object.keys(candidates);
       for (var i = 0; i < candidateNames.length; i++) {
         let name = candidateNames[i];
@@ -103,7 +113,14 @@ $( document ).ready(function() {
             $("#" + candidates[name]).html(numberOfVotes.toString());
           });
         }
-      })
+     
+
+      // Get a specific users vote by address -- change from input to automaticly use sender address 
+      contractInstance.getVotersVote.call($("#voteraddress").val()).then(function(proposalTitle){
+        $("userVote").val("");
+        $("#userVote").html(web3.toAscii(proposalTitle));
+        $("#voteraddress").val("");
+      });
     });
   });
 

@@ -18,6 +18,7 @@ contract Ballot {
     }
 
     address public chairperson;
+    uint electionEndTime; 
 
     // This declares a state variable that
     // stores a `Voter` struct for each possible address.
@@ -44,7 +45,11 @@ contract Ballot {
             }));
         }
     }
-
+    // Function to start an election by setting end time in epoch-seconds
+    function startElection(uint duration){
+        if(msg.sender != chairperson) throw;
+        electionEndTime = block.timestamp + duration;
+    }
 
     // This function returns the total votes a candidate has received so far
     function totalVotesFor(uint proposal) returns (uint numberOfVotes) {
@@ -68,15 +73,27 @@ contract Ballot {
     /// Give your vote (including votes delegated to you)
     /// to proposal `proposals[proposal].name`.
     function vote(uint proposal) {
-        Voter storage sender = voters[msg.sender];
-        require(!sender.voted);
-        sender.voted = true;
-        sender.vote = proposal;
+        // Check if election is still active 
+        if (electionEndTime > block.timestamp){
+            Voter storage sender = voters[msg.sender];
+            require(!sender.voted);
+            sender.voted = true;
+            sender.vote = proposal;
 
-        // If `proposal` is out of the range of the array,
-        // this will throw automatically and revert all
-        // changes.
-        proposals[proposal].voteCount += sender.weight;
+            // If `proposal` is out of the range of the array,
+            // this will throw automatically and revert all
+            // changes.
+            proposals[proposal].voteCount += sender.weight;
+        }
+
+    }
+
+    // Return the vote 
+    function getVotersVote(address voterAddress) constant
+            returns (bytes32 proposalTitle)
+    {   
+        uint votedVote = voters[voterAddress].vote;
+        proposalTitle = proposals[votedVote].name;
     }
 
     /// @dev Computes the winning proposal taking all
@@ -101,6 +118,4 @@ contract Ballot {
     {
         winnerTitle = proposals[winningProposal()].name;
     }
-
-
 }
