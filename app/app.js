@@ -19,7 +19,7 @@ import ballot_artifacts from '../build/contracts/Ballot.json'
 
 var Ballot = contract(ballot_artifacts);
 
-var proposals = {"Göran Persson": 1, "Anders Borg": 2, "Blankt": 3}
+let candidates = {"Göran Persson": "candidate-1", "Anders Borg": "candidate-2", "Blankt": "candidate-3"}
 
 $( document ).ready(function() {
   if (typeof web3 !== 'undefined') {
@@ -33,7 +33,7 @@ $( document ).ready(function() {
   }
 
   Ballot.setProvider(web3.currentProvider);
-  let proposals2 = Object.keys(proposals);
+  let proposals2 = Object.keys(candidates);
   for (var i = 0; i < proposals2.length; i++) {
     let name = proposals2[i];
 
@@ -48,36 +48,31 @@ $( document ).ready(function() {
   $( "#vote" ).click(function(){
       // Authorize voter - get voter address from login 
       web3.eth.defaultAccount = web3.eth.accounts[0];
-      var voterAddress1 = web3.eth.accounts[1]; // Change to real adresses!
-      var voterAddress2 = web3.eth.accounts[2]; // Change to real adresses!
-      var voterAddress3 = web3.eth.accounts[3]; // Change to real adresses!
-      var voterAddress4 = web3.eth.accounts[4]; // Change to real adresses!
-      
-      window.console.log(voterAddress1 + "-- " + web3.eth.defaultAccount );
-      console.log(Ballot.deployed());
+      var inputAddress = $("#voteraddress").val()
       Ballot.deployed().then(function(contractInstance){
         // Check which proposal was voted for 
         var votedProposal;
         switch($("#candidate").val()) {
           case "Göran Persson":
-              votedProposal = 1;
+              votedProposal = 0;
               break;
           case "Anders Borg":
-              votedProposal = 2;
+              votedProposal = 1;
               break;
           case "Blankt":
-              votedProposal = 3;
+              votedProposal = 2;
               break;
-          default:
-           
+          default: 
       }
+      try {
         // Give the voter access to vote
-        contractInstance.giveRightToVote(voterAddress1, {from: web3.eth.defaultAccount})
+        contractInstance.giveRightToVote(inputAddress, {from: web3.eth.defaultAccount})
         // Cast the vote 
-        contractInstance.vote(votedProposal, {from: voterAddress1}) // Change to real candidate
-        try {
+        contractInstance.vote(votedProposal, {from: inputAddress}) // Change to real candidate
+       
           $("#msg").html("Vote has been submitted. The vote count will increment as soon as the vote is recorded on the blockchain. Please wait.")
           $("#candidate").val("");
+          $("#voteraddress").val("");
       
           /* Voting.deployed() returns an instance of the contract. Every call
           * in Truffle returns a promise which is why we have used then()
@@ -94,8 +89,20 @@ $( document ).ready(function() {
   // When result is collected 
   $( "#results" ).click(function(){
     Ballot.deployed().then(function(contractInstance){
-      contractInstance.winnerName.call({from: web3.eth.defaultAccount}).then(function(winnerTitle){
-        window.alert(winnerTitle);
+      // Get winner 
+      contractInstance.winnerName.call().then(function(winnerTitle){
+        
+        //window.alert(winnerTitle);
+      })
+      // Get number of votes of candidate 
+      contractInstance.totalVotesFor.call(0).then(function(numberOfVotes){
+      let candidateNames = Object.keys(candidates);
+      for (var i = 0; i < candidateNames.length; i++) {
+        let name = candidateNames[i];
+          contractInstance.totalVotesFor.call(i).then(function(numberOfVotes) {
+            $("#" + candidates[name]).html(numberOfVotes.toString());
+          });
+        }
       })
     });
   });

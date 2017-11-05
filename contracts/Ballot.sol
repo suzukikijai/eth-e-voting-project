@@ -45,6 +45,12 @@ contract Ballot {
         }
     }
 
+
+    // This function returns the total votes a candidate has received so far
+    function totalVotesFor(uint proposal) returns (uint numberOfVotes) {
+        numberOfVotes = proposals[proposal].voteCount;
+    }
+
     // Give `voter` the right to vote on this ballot.
     // May only be called by `chairperson`.
     function giveRightToVote(address voter) {
@@ -95,4 +101,6 @@ contract Ballot {
     {
         winnerTitle = proposals[winningProposal()].name;
     }
+
+
 }
