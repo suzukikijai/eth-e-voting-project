@@ -109,12 +109,33 @@ $( document ).ready(function() {
           });
         }
     
+
+        $("#voteraddress").val("");
+      });
+    });
+  
+
+  // When result is collected 
+  $( "#usersVote" ).click(function(){
+    Ballot.deployed().then(function(contractInstance){
       // Get a specific users vote by address -- change from input to automaticly use sender address 
       contractInstance.getVotersVote.call($("#voteraddress").val()).then(function(proposalTitle){
         $("userVote").val("");
         $("#userVote").html(web3.toAscii(proposalTitle));
         $("#voteraddress").val("");
-      });
+    });
+  });
+});
+
+
+  // When result is collected 
+  $( "#changeVoteButton" ).click(function(){
+    Ballot.deployed().then(function(contractInstance){
+      let newVote = $("#changedVote").val();
+      let inputAddress = $("#voteraddress").val()
+      contractInstance.changeVotersVote(2, {from: inputAddress}) // Change to real user address 
+      $("#changedVote").val("");
+      $("#voteraddress").val("");
     });
   });
 });

@@ -91,11 +91,24 @@ contract Ballot {
     }
 
     // Return the vote 
-    function getVotersVote(address voterAddress) constant
+    function getVotersVote(address voterAddress) constant // constant == read-only 
             returns (bytes32 proposalTitle)
     {   
         uint votedVote = voters[voterAddress].vote;
         proposalTitle = proposals[votedVote].name;
+    }
+
+    // Function to change a vote already casted 
+    function changeVotersVote(uint proposal){
+        require(block.timestamp < electionEndTime);
+        Voter storage sender = voters[msg.sender];
+        // Check that a vote already exists 
+        require(sender.voted);
+        // Deduct the old vote 
+        proposals[sender.vote].voteCount -= 1;
+        // Add the new vote 
+        sender.vote = proposal;
+        proposals[proposal].voteCount += 1; 
     }
 
     /// @dev Computes the winning proposal taking all
