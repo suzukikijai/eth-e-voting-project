@@ -18,7 +18,7 @@ import { default as contract } from 'truffle-contract'
 import ballot_artifacts from '../build/contracts/Ballot.json'
 
 var Ballot = contract(ballot_artifacts);
-let candidates = {"Göran Persson": "candidate-1", "Anders Borg": "candidate-2", "Blankt": "candidate-3"}
+var candidates = {"Göran Persson": "candidate-1", "Anders Borg": "candidate-2", "Blankt": "candidate-3"}
 
 $( document ).ready(function() {
   if (typeof web3 !== 'undefined') {
@@ -59,7 +59,7 @@ $( document ).ready(function() {
       var inputAddress = $("#voteraddress").val()
       Ballot.deployed().then(function(contractInstance){
         // Check which proposal was voted for 
-        var votedProposal;
+        let votedProposal;
         switch($("#candidate").val()) {
           case "Göran Persson":
               votedProposal = 0;
@@ -91,31 +91,8 @@ $( document ).ready(function() {
         }
     });
   });
-
-  // When result is collected 
-  $( "#results" ).click(function(){
-    Ballot.deployed().then(function(contractInstance){
-      // Get winner 
-      //contractInstance.winnerName.call().then(function(winnerTitle){
-        // Convert from bytes32 
-       // window.alert("Vinnaren är: " + web3.toAscii(winnerTitle));
-      //})
-      // Get number of votes of candidate 
-      let candidateNames = Object.keys(candidates);
-      for (var i = 0; i < candidateNames.length; i++) {
-        let name = candidateNames[i];
-          contractInstance.totalVotesFor.call(i).then(function(numberOfVotes) {
-            $("#" + candidates[name]).html(numberOfVotes.toString());
-          });
-        }
-    
-
-        $("#voteraddress").val("");
-      });
-    });
   
-
-  // When result is collected 
+  // Shows the users casted vote
   $( "#usersVote" ).click(function(){
     Ballot.deployed().then(function(contractInstance){
       // Get a specific users vote by address -- change from input to automaticly use sender address 
@@ -127,13 +104,46 @@ $( document ).ready(function() {
   });
 });
 
+// When result is collected 
+$( "#results" ).click(function(){
+  Ballot.deployed().then(function(contractInstance){
+    // Get number of votes of candidate 
+    let candidateNames = Object.keys(candidates);
+    for (var i = 0; i < candidateNames.length; i++) {
+      let name = candidateNames[i];
+      contractInstance.totalVotesFor.call(i).then(function(numberOfVotes) {
+         $("#" + candidates[name]).html(numberOfVotes.toString());
+      });
+    }
+      $("#voteraddress").val("");
 
-  // When result is collected 
+    // Get winner 
+    contractInstance.winnerName.call().then(function(winnerTitle){
+      // Convert from bytes32 
+      window.alert("Vinnaren är: " + web3.toAscii(winnerTitle));
+    })
+    });
+  });
+
+  // Changes a casted vote while the election is still open 
   $( "#changeVoteButton" ).click(function(){
     Ballot.deployed().then(function(contractInstance){
-      let newVote = $("#changedVote").val();
       let inputAddress = $("#voteraddress").val()
-      contractInstance.changeVotersVote(2, {from: inputAddress}) // Change to real user address 
+              // Check which proposal was voted for 
+              let votedProposal;
+              switch($("#changedVote").val()) {
+                case "Göran Persson":
+                    votedProposal = 0;
+                    break;
+                case "Anders Borg":
+                    votedProposal = 1;
+                    break;
+                case "Blankt":
+                    votedProposal = 2;
+                    break;
+                default: 
+            }
+      contractInstance.changeVotersVote(votedProposal, {from: inputAddress}) // Change to real user address 
       $("#changedVote").val("");
       $("#voteraddress").val("");
     });

@@ -53,7 +53,7 @@ contract Ballot {
 
     // This function returns the total votes a candidate has received so far
     function totalVotesFor(uint proposal) returns (uint numberOfVotes) {
-        require(block.timestamp > electionEndTime);
+        require(block.timestamp > electionEndTime); // INCLUDE WHEN FIXED! 
         numberOfVotes = proposals[proposal].voteCount;
     }
 
@@ -98,18 +98,6 @@ contract Ballot {
         proposalTitle = proposals[votedVote].name;
     }
 
-    // Function to change a vote already casted 
-    function changeVotersVote(uint proposal){
-        require(block.timestamp < electionEndTime);
-        Voter storage sender = voters[msg.sender];
-        // Check that a vote already exists 
-        require(sender.voted);
-        // Deduct the old vote 
-        proposals[sender.vote].voteCount -= 1;
-        // Add the new vote 
-        sender.vote = proposal;
-        proposals[proposal].voteCount += 1; 
-    }
 
     /// @dev Computes the winning proposal taking all
     /// previous votes into account.
