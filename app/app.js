@@ -142,10 +142,19 @@ $( "#results" ).click(function(){
                     votedProposal = 2;
                     break;
                 default: 
-            }
+            }     
       contractInstance.changeVotersVote(votedProposal, {from: inputAddress}) // Change to real user address 
       $("#changedVote").val("");
       $("#voteraddress").val("");
     });
   });
+
+// When result is collected 
+$( "#updateBlock" ).click(function(){
+  web3.eth.defaultAccount = web3.eth.accounts[0];
+  Ballot.deployed().then(function(contractInstance){
+      contractInstance.updateBlockNo(1, {from: web3.eth.defaultAccount})
+    });
+  });
+
 });
