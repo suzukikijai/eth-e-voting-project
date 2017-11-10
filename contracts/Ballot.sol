@@ -20,7 +20,7 @@ contract Ballot {
     address public chairperson;
     uint electionEndTime = 0;
     bool electionHasStarted = false;
-    bool electionIsOver;
+
     uint blockNo;
     // This declares a state variable that
     // stores a `Voter` struct for each possible address.
@@ -56,8 +56,8 @@ contract Ballot {
 
     // This function returns the total votes a candidate has received so far
     function totalVotesFor(uint proposal) returns (uint numberOfVotes) {
-        isElectionOver();
-        require(electionIsOver);
+        require(electionHasStarted);
+        require(now > electionEndTime);
         numberOfVotes = proposals[proposal].voteCount;
     }
 
@@ -79,8 +79,9 @@ contract Ballot {
     /// to proposal `proposals[proposal].name`.
     function vote(uint proposal) {
         // Check if election is still active 
-        isElectionOver();
-        if (!electionIsOver && electionHasStarted) {
+        require(electionHasStarted);
+        require(now < electionEndTime);
+
             Voter storage sender = voters[msg.sender];
             require(!sender.voted);
         
@@ -91,7 +92,6 @@ contract Ballot {
             // this will throw automatically and revert all
             // changes.
             proposals[proposal].voteCount += sender.weight;
-        }
     }
 
     // Return the vote 
@@ -123,14 +123,16 @@ contract Ballot {
     function winnerName()
             returns (bytes32 winnerTitle)
     {   
-        isElectionOver();
-        require(electionIsOver);
+        require(electionHasStarted);
+        require(now > electionEndTime);
         winnerTitle = proposals[winningProposal()].name;
     }
 
     // Function to change a vote already casted 
     function changeVotersVote(uint proposal) {
-     //require(block.timestamp < electionEndTime);
+        
+        require(electionHasStarted);
+        require(now < electionEndTime);
         Voter storage sender = voters[msg.sender];
         // Check that a vote already exists 
         require(sender.voted);
@@ -141,16 +143,13 @@ contract Ballot {
         proposals[proposal].voteCount += 1; 
     }
 
-
-    // Function to check if election is over or not
-    function isElectionOver() {
-        if (now > electionEndTime) {
-            electionIsOver = true;
-        }else {
-            electionIsOver = false; 
-        }
+    // Function removes vote to be called when they casted it live instead  
+    // NOT TESTED! 
+    function removeVotersVote(address voter) {
+        Voter storage sender = voters[voter];
+        proposals[sender.vote].voteCount -= 1;
+        delete voters[voter];
     }
-
     // Dummy function just to get a new block for correct timestamp 
     // REMOVE - when launched on testnet
     function updateBlockNo(uint no) {

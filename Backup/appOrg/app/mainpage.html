@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Valet 2018</title>
+  <meta charset="utf-8"/>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' rel='stylesheet' type='text/css'>
+  <script src="https://cdn.rawgit.com/ethereum/web3.js/develop/dist/web3.js"></script>
+  <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"></script>
+  <script src="./app.js"></script>
+</head>
+<body class="container">
+  <h1>Riksdagsvalet 2018</h1>
+  <p>Powered by ethereum.</p>
+  <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+        </div>
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="#">Rösta</a></li>
+          <li><a href="#">Min röst</a></li>
+          <li><a href="#">Valresultat</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="#" id="startElection"><span class="glyphicon glyphicon-user"></span>Starta röstning</a></li>
+            <li><a href="login.html"><span class="glyphicon glyphicon-log-in"></span> Logga ut</a></li>
+          </ul>
+      </div>
+    </nav>
+  <div class="table-responsive">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Kandidater</th>
+          <th>Röster</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Göran Persson</td>
+          <td id="candidate-1"></td>
+        </tr>
+        <tr>
+          <td>Anders Borg</td>
+          <td id="candidate-2"></td>
+        </tr>
+        <tr>
+          <td>Blankt</td>
+          <td id="candidate-3"></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Röstar-address</p>
+  <input type="text" id="voteraddress" />
+  <p></p>
+  <p>Vald kandidat</p>
+  <input type="text" id="candidate" />
+  <a href="#" id="vote" class="btn btn-primary">Rösta</a>
+  <p></p>
+  <a href="#" id="usersVote" class="btn btn-primary">Hämta din röst</a>
+  <a href="#" id="results" class="btn btn-primary">Hämta röstresultat</a>
+  <p></p>
+  <div class="well well-sm">
+    <p>Din röst:</p>
+    <p id="userVote"></p>
+  </div>
+  <p>Ändra till: </p>
+  <input type="text" id="changedVote" />
+  <a href="#" id="changeVoteButton" class="btn btn-primary">Ändra Röst</a>
+  <p></p>
+  <p></p>
+  <a href="#" id="updateBlock" class="btn btn-primary">Nytt block</a>
+  <p></p>
+  <p></p>
+</body>
+</html>

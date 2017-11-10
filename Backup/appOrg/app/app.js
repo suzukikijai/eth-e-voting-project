@@ -62,18 +62,18 @@ $( document ).ready(function() {
         let votedProposal;
         switch($("#candidate").val()) {
           case "Göran Persson":
-              votedProposal = 0;
-              break;
-          case "Anders Borg":
               votedProposal = 1;
               break;
-          case "Blankt":
+          case "Anders Borg":
               votedProposal = 2;
+              break;
+          case "Blankt":
+              votedProposal = 3;
               break;
           default: 
       }
       try {
-        // Give the voter access to vote
+        // Give the voter access to vote 
         contractInstance.giveRightToVote(inputAddress, {from: web3.eth.defaultAccount})
         // Cast the vote 
         contractInstance.vote(votedProposal, {from: inputAddress}) // Change to real candidate
@@ -109,9 +109,10 @@ $( "#results" ).click(function(){
   Ballot.deployed().then(function(contractInstance){
     // Get number of votes of candidate 
     let candidateNames = Object.keys(candidates);
+    let sortedVotes;
     for (var i = 0; i < candidateNames.length; i++) {
       let name = candidateNames[i];
-      contractInstance.totalVotesFor.call(i).then(function(numberOfVotes) {
+      contractInstance.totalVotesFor.call(i + 1).then(function(numberOfVotes) {
          $("#" + candidates[name]).html(numberOfVotes.toString());
       });
     }
@@ -133,13 +134,13 @@ $( "#results" ).click(function(){
               let votedProposal;
               switch($("#changedVote").val()) {
                 case "Göran Persson":
-                    votedProposal = 0;
-                    break;
-                case "Anders Borg":
                     votedProposal = 1;
                     break;
-                case "Blankt":
+                case "Anders Borg":
                     votedProposal = 2;
+                    break;
+                case "Blankt":
+                    votedProposal = 3;
                     break;
                 default: 
             }     

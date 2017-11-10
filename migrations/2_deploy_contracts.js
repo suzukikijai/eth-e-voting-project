@@ -1,6 +1,6 @@
 var Ballot = artifacts.require("../Contracts/Ballot.sol");
 module.exports = function(deployer) {
-  deployer.deploy(Ballot, ['Göran Persson', 'Anders Borg', 'Blankt'],{gas: 790000});
+  deployer.deploy(Ballot, ['null', 'Göran Persson', 'Anders Borg', 'Blankt'],{gas: 790000});
 };
 
 /* As you can see above, the deployer expects the first argument to   be the name of the contract followed by constructor arguments. In our case, there is only one argument which is an array of
