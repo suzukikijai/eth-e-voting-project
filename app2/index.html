@@ -29,11 +29,11 @@
       </ul>
     </div>
   </nav>
-
+  
+  <div class="election-header">
+    <h3 class="election-bar-text">Information</h3>
+  </div>
   <div id="info">
-    <div class="election-header">
-      <h3 class="election-bar-text">Information</h3>
-    </div>
     <div class="election-card-container">
       <p>Via den internetbaserade röstningstjänsten har du möjlighet att lägga din röst för riksdagsvalet, kommunval och valet för landstingsfullmäktige.</p>
       <p>Din röst lägger du genom att välja ett parti och en kandidat och genomför röstningen genom att trycka på knappen "Rösta".</p>
@@ -43,24 +43,44 @@
     </div>
   </div>
 
-  <div id="election-1">
-      <div class="election-header">
-        <h3 class="election-bar-text">Riksdagsvalet 2018</h3>
-        <img id="checkbox-1" class="checkbox hidden" src="media/checkboxicon.png"></img>
+  <div class="election-header">
+    <h3 class="election-bar-text">Riksdagsvalet 2018</h3>
+    <img id="checkbox-0" class="checkbox hidden" src="media/checkboxicon.png"></img>
+  </div>
+  <div id="election-0">
+      <div id="election-card-container-0" class="election-card-container">
       </div>
-      <div class="election-card-container">
-        <div class="election-card"></div>
-        <div class="election-card"></div>
-        <div class="election-card"></div>
-        <div class="election-card"></div>
-        <div class="election-card"></div>
-        <div class="election-card"></div>
+      <div id="candidate-list-0"></div>
+      <a id="vote-0" class="btn btn-primary">Rösta Riksdagsvalet</a> 
+  </div>
+
+  <div class="election-header">
+    <h3 class="election-bar-text">Landstingsfullmäktige 2018</h3>
+    <img id="checkbox-1" class="checkbox hidden" src="media/checkboxicon.png"></img>
+  </div>
+  <div id="election-1">
+      <div id="election-card-container-1" class="election-card-container">
       </div>
       <div id="candidate-list-1"></div>
-      <a id="vote-1" class="btn btn-primary">Rösta</a> 
+      <a id="vote-1" class="btn btn-primary">Rösta Landstingsfullmäktige</a> 
   </div>
+
+  <div class="election-header">
+    <h3 class="election-bar-text">Kommunfullmäktige 2018</h3>
+    <img id="checkbox-2" class="checkbox hidden" src="media/checkboxicon.png"></img>
+  </div>
+  <div id="election-2">
+      <div id="election-card-container-2" class="election-card-container">
+      </div>
+      <div id="candidate-list-2"></div>
+      <a id="vote-2" class="btn btn-primary">Rösta Kommunfullmäktige</a> 
+  </div>
+  <!--
+    Skriv om den här knappen för att skapa blocket etc.
+
     <input type="text" id="candidate" />
     <a href="#" id="vote" class="btn btn-primary">Rösta</a>
+  -->
   
 </body>
 </html>

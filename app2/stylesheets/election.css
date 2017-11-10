@@ -1,11 +1,12 @@
 html {
   height:100.1%;
 }
-#info, #election-1, #election-2, #election-3 {
+#info, #election-0, #election-1, #election-2 {
   width: 100%;
   padding: 0 0px 25px 0px;
   overflow:auto;
   border: solid 1px #E7E7E7;
+  border-top: 0px;
   margin-bottom:30px;
 }
 
@@ -14,8 +15,16 @@ html {
   height: 50px;
   padding-left:2.5%;
   background-color: #F8F8F8;
-  border-bottom: solid 1px #E7E7E7;
+  border: 1px solid #E7E7E7;
 }
+
+.election-bar-text {
+  color: #777;
+  margin-top: 12px;
+  text-align:center;
+  float:left;
+}
+
 .election-card-container {
   width: 100%;
   overflow: auto;
@@ -24,47 +33,53 @@ html {
   padding-top:10px;
 }
 
-.election-bar-text {
-  color: #777;
-  margin: 10zpx;
-  float:left;
+.checkbox {
+  height: 40px;
+  width: 40px;
+  left:30px;
+  top: -5px;
 }
 
-.checkbox {
-  height: 50px;
-  width: 50px;
+.cand-cb {
   float:right;
-  top: -10px;
-}
-.styled {
-  float:right;
-  height:25px;
-  width:25px;
-  top:-10px;
+  height:15px;
+  width:15px;
+  top:-20px;
 }
 
 .election-card {
   width: 200px;
   height: 200px;
-  background-color: #D5D5D5;
+  background-color:#F8F8F8; /* #D5D5D5; */
   margin: 8px;
   float:left;
+  border: solid 1px #E7E7E7;
+}
+.election-card > *{
+  text-align:center;
 }
 
 .election-card:hover {
-  background-color: blue;
+  background-color: #D5D5D5;
+  border: solid 1px #E7E7E7;
 }
 
 .selected-card {
-  background-color:red;
+  background-color: #D5D5D5;
+  border: solid 1px #999;
 }
+
+.selected-card:hover {
+  background-color: #D5D5D5;
+  border: solid 1px #999;
+}
+
 .btn {
   margin:20px;
 }
 
-#vote-1, #vote-2, #vote-3 {
+#vote-0, #vote-1, #vote-2 {
   clear:both;
-  
   margin: 15px 0 0 3.5%;
 }
 

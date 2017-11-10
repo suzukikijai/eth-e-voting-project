@@ -1,22 +1,77 @@
 [
   {
-    "party":"Moderaterna",
-    "location":"Uppsala",
-    "party-text": "Du kan personrösta genom att sätta ett kryss för den kandidat du helst vill ska bli vald. Du kan inte personrösta på fler än en eller någon annan kandidat än de som står nedan.",
-    "candidates": [
-      "Ulrika Karlsson, 41 år, riksdagsledamot, Uppsala",
-      "Jessika Vilhelmsson, 41 år, riksdagsledamot, Enköping",
-      "Per Bill, 56 år, riksdagsledamot, Uppsala"
+  "election":"Riksdagsval",
+  "parties": [
+    {
+      "party":"Moderaterna",
+      "location":"Uppsala",
+      "party-text": "Du kan personrösta genom att sätta ett kryss för den kandidat du helst vill ska bli vald. Du kan inte personrösta på fler än en eller någon annan kandidat än de som står nedan.",
+      "candidates": [
+        "Ulrika Karlsson, 41 år, riksdagsledamot, Uppsala",
+        "Jessika Vilhelmsson, 41 år, riksdagsledamot, Enköping",
+        "Per Bill, 56 år, riksdagsledamot, Uppsala"
+      ]
+    },
+    {
+      "party":"Arbetarepartiet-Socialdemokraterna",
+      "location":"Uppsala",
+      "party-text":"Du kan personrösta genom att sätta ett kryss för den kandidat du helst vill ska bli vald. Du kan inte personrösta på fler än en eller någon annan kandidat än de som står nedan.",
+      "candidates": [
+        "Ardalan Shekarabi, 35 år, Doktorand i offentlig rätt, Knivsta",
+        "Agneta Gille, 58 år, Barnskötare, Uppsala",
+        "Pyry Niemi, 49 år, Företagare, Bålsta"
+      ]
+    }
+  ]
+  },
+  {
+    "election":"Landstingsfullmäktige",
+    "parties": [
+      {
+        "party":"Moderaterna",
+        "location":"Uppsala",
+        "party-text": "Du kan personrösta genom att sätta ett kryss för den kandidat du helst vill ska bli vald. Du kan inte personrösta på fler än en eller någon annan kandidat än de som står nedan.",
+        "candidates": [
+          "Ulrika Karlsson, 41 år, riksdagsledamot, Uppsala",
+          "Jessika Vilhelmsson, 41 år, riksdagsledamot, Enköping",
+          "Per Bill, 56 år, riksdagsledamot, Uppsala"
+        ]
+      },
+      {
+        "party":"Arbetarepartiet-Socialdemokraterna",
+        "location":"Uppsala",
+        "party-text":"Du kan personrösta genom att sätta ett kryss för den kandidat du helst vill ska bli vald. Du kan inte personrösta på fler än en eller någon annan kandidat än de som står nedan.",
+        "candidates": [
+          "Ardalan Shekarabi, 35 år, Doktorand i offentlig rätt, Knivsta",
+          "Agneta Gille, 58 år, Barnskötare, Uppsala",
+          "Pyry Niemi, 49 år, Företagare, Bålsta"
+        ]
+      }
     ]
   },
   {
-    "party":"Arbetarepartiet-Socialdemokraterna",
-    "location":"Uppsala",
-    "party-text":"Du kan personrösta genom att sätta ett kryss för den kandidat du helst vill ska bli vald. Du kan inte personrösta på fler än en eller någon annan kandidat än de som står nedan.",
-    "candidates": [
-      "Ardalan Shekarabi, 35 år, Doktorand i offentlig rätt, Knivsta",
-      "Agneta Gille, 58 år, Barnskötare, Uppsala",
-      "Pyry Niemi, 49 år, Företagare, Bålsta"
+    "election":"Kommunfullmäktige",
+    "parties": [
+      {
+        "party":"Moderaterna",
+        "location":"Uppsala",
+        "party-text": "Du kan personrösta genom att sätta ett kryss för den kandidat du helst vill ska bli vald. Du kan inte personrösta på fler än en eller någon annan kandidat än de som står nedan.",
+        "candidates": [
+          "Ulrika Karlsson, 41 år, riksdagsledamot, Uppsala",
+          "Jessika Vilhelmsson, 41 år, riksdagsledamot, Enköping",
+          "Per Bill, 56 år, riksdagsledamot, Uppsala"
+        ]
+      },
+      {
+        "party":"Arbetarepartiet-Socialdemokraterna",
+        "location":"Uppsala",
+        "party-text":"Du kan personrösta genom att sätta ett kryss för den kandidat du helst vill ska bli vald. Du kan inte personrösta på fler än en eller någon annan kandidat än de som står nedan.",
+        "candidates": [
+          "Ardalan Shekarabi, 35 år, Doktorand i offentlig rätt, Knivsta",
+          "Agneta Gille, 58 år, Barnskötare, Uppsala",
+          "Pyry Niemi, 49 år, Företagare, Bålsta"
+        ]
+      }
     ]
   }
 ]
