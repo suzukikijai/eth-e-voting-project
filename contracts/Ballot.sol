@@ -18,8 +18,10 @@ contract Ballot {
     }
 
     address public chairperson;
-    uint electionEndTime; 
-
+    uint electionEndTime = 0;
+    bool electionHasStarted = false;
+    bool electionIsOver;
+    uint blockNo;
     // This declares a state variable that
     // stores a `Voter` struct for each possible address.
     mapping(address => Voter) public voters;
@@ -46,14 +48,16 @@ contract Ballot {
         }
     }
     // Function to start an election by setting end time in epoch-seconds
-    function startElection(uint duration){
+    function startElection(uint duration) {
         require(msg.sender == chairperson);
         electionEndTime = block.timestamp + duration;
+        electionHasStarted = true;
     }
 
     // This function returns the total votes a candidate has received so far
     function totalVotesFor(uint proposal) returns (uint numberOfVotes) {
-        require(block.timestamp > electionEndTime); // INCLUDE WHEN FIXED! 
+        isElectionOver();
+        require(electionIsOver);
         numberOfVotes = proposals[proposal].voteCount;
     }
 
@@ -75,7 +79,8 @@ contract Ballot {
     /// to proposal `proposals[proposal].name`.
     function vote(uint proposal) {
         // Check if election is still active 
-        if (electionEndTime > block.timestamp){
+        isElectionOver();
+        if (!electionIsOver && electionHasStarted) {
             Voter storage sender = voters[msg.sender];
             require(!sender.voted);
         
@@ -87,7 +92,6 @@ contract Ballot {
             // changes.
             proposals[proposal].voteCount += sender.weight;
         }
-
     }
 
     // Return the vote 
@@ -116,10 +120,40 @@ contract Ballot {
     // Calls winningProposal() function to get the index
     // of the winner contained in the proposals array and then
     // returns the name of the winner
-    function winnerName() constant
+    function winnerName()
             returns (bytes32 winnerTitle)
     {   
-        require(block.timestamp > electionEndTime);
+        isElectionOver();
+        require(electionIsOver);
         winnerTitle = proposals[winningProposal()].name;
+    }
+
+    // Function to change a vote already casted 
+    function changeVotersVote(uint proposal) {
+     //require(block.timestamp < electionEndTime);
+        Voter storage sender = voters[msg.sender];
+        // Check that a vote already exists 
+        require(sender.voted);
+        // Deduct the old vote 
+        proposals[sender.vote].voteCount -= 1;
+        // Add the new vote 
+        sender.vote = proposal;
+        proposals[proposal].voteCount += 1; 
+    }
+
+
+    // Function to check if election is over or not
+    function isElectionOver() {
+        if (now > electionEndTime) {
+            electionIsOver = true;
+        }else {
+            electionIsOver = false; 
+        }
+    }
+
+    // Dummy function just to get a new block for correct timestamp 
+    // REMOVE - when launched on testnet
+    function updateBlockNo(uint no) {
+        blockNo = no;
     }
 }
