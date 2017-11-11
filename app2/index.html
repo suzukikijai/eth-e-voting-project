@@ -3,13 +3,12 @@
 <head>
   <title>Valet 2018</title>
   <meta charset="utf-8"/>
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
   <link rel="stylesheet" type="text/css" href="stylesheets/app.css">
   <link rel="stylesheet" type="text/css" href="stylesheets/election.css">
-  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
   <script src="./app.js"></script>
   <script src="./interface.js"></script>
-  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
- <link href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' rel='stylesheet' type='text/css'>
+  <link href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' rel='stylesheet' type='text/css'>
   <script src="https://cdn.rawgit.com/ethereum/web3.js/develop/dist/web3.js"></script>
 </head>
 <body class="container">
@@ -20,16 +19,17 @@
       <div class="navbar-header">
       </div>
       <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Rösta</a></li>
-        <li><a href="my_vote.html">Min röst</a></li>
-        <li><a href="result.html">Valresultat</a></li>
+        <li><a id="showVoteView" href="#">Rösta</a></li>
+        <li><a id="showMyVoteView" href="#">Min röst</a></li>
+        <li><a id="showResultView" href="#">Valresultat</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="login.html"><span class="glyphicon glyphicon-log-in"></span> Logga ut</a></li>
       </ul>
     </div>
   </nav>
-  
+  <div id="content"></div>
+<!--
   <div class="election-header">
     <h3 class="election-bar-text">Information</h3>
   </div>
@@ -53,7 +53,6 @@
       <div id="candidate-list-0"></div>
       <a id="vote-0" class="btn btn-primary">Rösta Riksdagsvalet</a> 
   </div>
-
   <div class="election-header">
     <h3 class="election-bar-text">Landstingsfullmäktige 2018</h3>
     <img id="checkbox-1" class="checkbox hidden" src="media/checkboxicon.png"></img>
@@ -75,12 +74,12 @@
       <div id="candidate-list-2"></div>
       <a id="vote-2" class="btn btn-primary">Rösta Kommunfullmäktige</a> 
   </div>
-  <!--
+  
     Skriv om den här knappen för att skapa blocket etc.
 
     <input type="text" id="candidate" />
     <a href="#" id="vote" class="btn btn-primary">Rösta</a>
-  -->
+-->
   
 </body>
 </html>

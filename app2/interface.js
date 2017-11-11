@@ -2,10 +2,6 @@ var PartyVote = ["", "", ""];
 var CandidateVote = ["", "", ""];
 var items;
 
-$.getJSON("candidates.json", function(data) {
-	items = [data];
-	console.log(items);
-});
 
 //Göra:
 //Funktionalitet för att ändra sin röst
@@ -13,20 +9,41 @@ $.getJSON("candidates.json", function(data) {
 //sliders?
 
 // Onload
-$(function() {
-
-	//Generate election 1
+$.getJSON("candidates.json", function(data) {
+	items = [data];
+	console.log(items);
+	$("#content").html(generateVoteView());
 	$("#election-card-container-0").html(generatePartyCards(0));
-	$("#election-card-container-1").html(generatePartyCards(1));
-	$("#election-card-container-2").html(generatePartyCards(2));
-	
-	// Assigning events
+	//$("#election-card-container-1").html(generatePartyCards(1));
+	//$("#election-card-container-2").html(generatePartyCards(2));
 	$(".election-card").click(selectCard);
 	$(".cand-cb").click(selectCandidate);
 	$("#vote-0").click(storeVote);
-	$("#vote-1").click(storeVote);
-	$("#vote-2").click(storeVote);
+	//$("#vote-1").click(storeVote);
+	//$("#vote-2").click(storeVote);
+	//$("#voteView").addClass("hidden");
+	$("#showResultView").click(function(){
+		$("#content").html(generateResultView);
+	});
+	$("#showVoteView").click(function(){
+		$("#content").html(generateVoteView);
+		$("#election-card-container-0").html(generatePartyCards(0));
+		//$("#election-card-container-1").html(generatePartyCards(1));
+		//$("#election-card-container-2").html(generatePartyCards(2));
+		$(".election-card").click(selectCard);
+		$(".cand-cb").click(selectCandidate);
+		$("#vote-0").click(storeVote);
+	});
+	$("#showResultView").click(function(){
+		$("#content").html(generateResultView);
+	});
+	$("#showMyVoteView").click(function(){
+		$("#content").html(generateMyVoteView);
+	});
 });
+//$("#content").html(generateVoteView());
+//Generate election 1
+
 
 function generateCandidateTable(election, party) {
 	var candidateTable = "<div class='table-responsive'><table class='table table-bordered'><thead><tr><th><h4>"+ items[0][election].parties[party].party+"</h4></th></tr></thead><tbody>";
@@ -48,11 +65,17 @@ function generatePartyCards(election) {
 	return electionCards;
 }
 
+function generateResultTable() {
+
+}
+
 function storeVote(){
 	// Get election variable 
 	var election = this.id.slice(5);
 	var userConfirm = false;
 	var confirmMsg;
+
+	// Ask user to confirm vote based on selection
 	if (PartyVote[election] == "") {
 		userConfirm =	confirm(items[0][election].election + ":\nDu har valt att rösta blankt.\n\nTryck på avbryt för att göra om.");
 	}
@@ -75,7 +98,7 @@ function selectCard() {
 	var $this = $(this);
 	// Get election variable
 	var	$thisElection = $this.attr("id").slice(5,6);
-	// Get card variable
+	// Get party variable
 	var $thisParty = $this.attr("id").slice(7);
 	// Add to vote (Find new solution)
 	PartyVote[$thisElection] = $thisParty;
@@ -121,6 +144,119 @@ function selectCandidate() {
 	console.log(CandidateVote);
 }
 
-function startElection() {
+function generateVoteView() {
+var html = "";
+html += "<div id='voteView'>";
+html += "<div class='election-header'>";
+html += "<h3 class='election-bar-text'>Information</h3>";
+html += "</div>";
+html += "<div id='info'>";
+html += "<div class='election-card-container'>";
+html += "<p>Via den internetbaserade röstningstjänsten har du möjlighet att lägga din röst för riksdagsvalet, kommunval och valet för landstingsfullmäktige.</p>";
+html += "<p>Din röst lägger du genom att välja ett parti och en kandidat och genomför röstningen genom att trycka på knappen 'Rösta'.</p>";
+html += "<p>Vill du rösta blankt eller bara på ett parti trycker du på knappen 'Rösta'.</p>";
+html += "<p>Din röst kan du ändra fram till och med... </p>";
+html += "<p>Logga ut när du har röstat färdigt.</p>";
+html += "</div>";
+html += "</div>";
+html += "<div class='election-header'>";
+html += "<h3 class='election-bar-text'>Riksdagsvalet 2018</h3>";
+html += "<img id='checkbox-0' class='checkbox hidden' src='media/checkboxicon.png'></img>";
+html += "</div>";
+html += "<div id='election-0'>";
+html += "<div id='election-card-container-0' class='election-card-container'>";
+html += "</div>";
+html += "<div id='candidate-list-0'></div>";
+html += "<a id='vote-0' class='btn btn-primary'>Rösta Riksdagsvalet</a> ";
+html += "</div>";
+html += "</div>";
+return html;
+}
 
+function generateMyVoteView() {
+
+}
+
+function generateResultView() {
+var html = "";
+html += "<div id='resultView'>";
+
+html += "<table class='table table-bordered'>";
+html += "<div class='table-responsive'>";
+html += "<thead>";
+html += "<tr>";
+html += "<th>Partier</th>";
+html += "<th>Röster</th>";
+html += "</tr>";
+html += "</thead>";
+html += "<tbody>";
+html += "<tr>";
+html += "<td>Moderaterna</td>";
+html += "<td id='candidate-1'></td>";
+html += "</tr>";
+html += "<tr>";
+html += "<td>Socialdemokraterna</td>";
+html += "<td id='candidate-2'></td>";
+html += "</tr>";
+html += "<tr>";
+html += "<td>Blankt</td>";
+html += "<td id='candidate-3'></td>";
+html += "</tr>";
+html += "</tbody>";
+html += "</table>";
+html += "</div>";
+
+
+html += "<table class='table table-bordered'>";
+html += "<div class='table-responsive'>";
+html += "<thead>";
+html += "<tr>";
+html += "<th>Moderaterna: Kandidater</th>";
+html += "<th>Röster</th>";
+html += "</tr>";
+html += "</thead>";
+html += "<tbody>";
+html += "<tr>";
+html += "<td>Ulrika Karlsson, 41 år, riksdagsledamot, Uppsala</td>";
+html += "<td id='candidate-1'></td>";
+html += "</tr>";
+html += "<tr>";
+html += "<td>Jessika Vilhelmsson, 41 år, riksdagsledamot, Enköping</td>";
+html += "<td id='candidate-2'></td>";
+html += "</tr>";
+html += "<tr>";
+html += "<td>Per Bill, 56 år, riksdagsledamot, Uppsala</td>";
+html += "<td id='candidate-3'></td>";
+html += "</tr>";
+html += "</tbody>";
+html += "</table>";
+html += "</div>";
+
+html += "<table class='table table-bordered'>";
+html += "<div class='table-responsive'>";
+html += "<thead>";
+html += "<tr>";
+html += "<th>Socialdemokraterna: Kandidater</th>";
+html += "<th>Röster</th>";
+html += "</tr>";
+html += "</thead>";
+html += "<tbody>";
+html += "<tr>";
+html += "<td>Ardalan Shekarabi, 35 år, Doktorand i offentlig rätt, Knivsta</td>";
+html += "<td id='candidate-1'></td>";
+html += "</tr>";
+html += "<tr>";
+html += "<td>Agneta Gille, 58 år, Barnskötare, Uppsala</td>";
+html += "<td id='candidate-2'></td>";
+html += "</tr>";
+html += "<tr>";
+html += "<td>Pyry Niemi, 49 år, Företagare, Bålsta</td>";
+html += "<td id='candidate-3'></td>";
+html += "</tr>";
+html += "</tbody>";
+html += "</table>";
+html += "</div>";
+
+html += "</div>";
+return html;
 }
