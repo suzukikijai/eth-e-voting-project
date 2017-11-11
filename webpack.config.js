@@ -13,18 +13,6 @@ module.exports = {
       { from: './app/index.html', to: "index.html" }
     ])
   ],
-  plugins: [
-    // Copy our app's index.html to the build folder.
-    new CopyWebpackPlugin([
-      { from: './app/login.html', to: "login.html" }
-    ])
-  ],
-  plugins: [
-    // Copy our app's index.html to the build folder.
-    new CopyWebpackPlugin([
-      { from: './app/header.html', to: "header.html" }
-    ])
-  ],
   module: {
     rules: [
       {

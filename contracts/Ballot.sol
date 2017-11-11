@@ -13,8 +13,9 @@ contract Ballot {
 
     // This is a type for a single proposal.
     struct Proposal {
-        bytes32 name;   // short name (up to 32 bytes)
+        bytes32 party;   // short name (up to 32 bytes)
         uint voteCount; // number of accumulated votes
+        bytes32 candidateName;
     }
 
     address public chairperson;
@@ -42,8 +43,9 @@ contract Ballot {
             // Proposal object and `proposals.push(...)`
             // appends it to the end of `proposals`.
             proposals.push(Proposal({
-                name: proposalNames[i],
-                voteCount: 0
+                candidateName: proposalNames[i],
+                voteCount: 0,
+                party: "sossarna" // FIX PARTY 
             }));
         }
     }
@@ -62,15 +64,8 @@ contract Ballot {
     }
 
     // Give `voter` the right to vote on this ballot.
-    // May only be called by `chairperson`.
+    // Hardcode addresses before election 
     function giveRightToVote(address voter) {
-        // If the argument of `require` evaluates to `false`,
-        // it terminates and reverts all changes to
-        // the state and to Ether balances. It is often
-        // a good idea to use this if functions are
-        // called incorrectly. But watch out, this
-        // will currently also consume all provided gas
-        // (this is planned to change in the future).
         require((msg.sender == chairperson) && !voters[voter].voted && (voters[voter].weight == 0));
         voters[voter].weight = 1;
     }
@@ -94,12 +89,13 @@ contract Ballot {
             proposals[proposal].voteCount += sender.weight;
     }
 
-    // Return the vote 
+    // Return the vote  -- should only be called by voter
     function getVotersVote(address voterAddress) constant // constant == read-only 
             returns (bytes32 proposalTitle)
     {   
+        // require(msg.sender = voteraddress);
         uint votedVote = voters[voterAddress].vote;
-        proposalTitle = proposals[votedVote].name;
+        proposalTitle = proposals[votedVote].candidateName;
     }
 
 
@@ -125,7 +121,7 @@ contract Ballot {
     {   
         require(electionHasStarted);
         require(now > electionEndTime);
-        winnerTitle = proposals[winningProposal()].name;
+        winnerTitle = proposals[winningProposal()].candidateName;
     }
 
     // Function to change a vote already casted 
