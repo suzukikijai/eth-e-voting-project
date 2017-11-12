@@ -1,12 +1,37 @@
-var PartyVote = ["", "", ""];
-var CandidateVote = ["", "", ""];
+var PartyVote;
+var CandidateVote;
+//var PartyVote = ["", "", ""];
+//var CandidateVote = ["", "", ""];
 var items;
 
 
 //Göra:
 //Funktionalitet för att ändra sin röst
-//Producera lista med kandidater
-//sliders?
+
+//Full election
+	//$("#election-card-container-1").html(generatePartyCards(1));
+	//$("#election-card-container-2").html(generatePartyCards(2));
+	//$("#vote-1").click(storeVote);
+	//$("#vote-2").click(storeVote);
+
+/*	#Loading all content and relying on hiding instead of updating.
+		#This will make it so that the user cannot vote again.
+	
+		$("#concent").addClass("hidden");
+		$("#content").html(generateVoteView);
+		$("#election-card-container-0").html(generatePartyCards(0));
+		$(".election-card").click(selectCard);
+		$(".cand-cb").click(selectCandidate);
+		$("#vote-0").click(storeVote);
+
+		$("#content").html(generateResultView);
+		$("#resultView").addClass("hidden");
+
+		$("#content").html(generateMyVoteView);
+		$("#myVoteView").addClass("hidden");
+
+		$("#content").removeClass("hidden");
+*/
 
 // Onload
 $.getJSON("candidates.json", function(data) {
@@ -15,14 +40,9 @@ $.getJSON("candidates.json", function(data) {
 	$("#showVoteView").addClass("active");
 	$("#content").html(generateVoteView());
 	$("#election-card-container-0").html(generatePartyCards(0));
-	//$("#election-card-container-1").html(generatePartyCards(1));
-	//$("#election-card-container-2").html(generatePartyCards(2));
 	$(".election-card").click(selectCard);
 	$(".cand-cb").click(selectCandidate);
 	$("#vote-0").click(storeVote);
-	//$("#vote-1").click(storeVote);
-	//$("#vote-2").click(storeVote);
-	//$("#voteView").addClass("hidden");
 	$("#showResultView").click(function(){
 		$("#content").html(generateResultView);
 	});
@@ -31,8 +51,6 @@ $.getJSON("candidates.json", function(data) {
 		$("#showVoteView").addClass("active");
 		$("#content").html(generateVoteView);
 		$("#election-card-container-0").html(generatePartyCards(0));
-		//$("#election-card-container-1").html(generatePartyCards(1));
-		//$("#election-card-container-2").html(generatePartyCards(2));
 		$(".election-card").click(selectCard);
 		$(".cand-cb").click(selectCandidate);
 		$("#vote-0").click(storeVote);
@@ -48,12 +66,11 @@ $.getJSON("candidates.json", function(data) {
 		$("#content").html(generateMyVoteView);
 	});
 });
-//$("#content").html(generateVoteView());
-//Generate election 1
+
+//Reset navbar active
 function resetActiveCss() {
 	$(".active").removeClass("active");
 }
-
 
 function generateCandidateTable(election, party) {
 	var candidateTable = "<div class='table-responsive'><table class='table table-bordered'><thead><tr><th><h4>"+ items[0][election].parties[party].party+"</h4></th></tr></thead><tbody>";
@@ -83,7 +100,6 @@ function storeVote(){
 	// Get election variable 
 	var election = this.id.slice(5);
 	var userConfirm = false;
-	var confirmMsg;
 
 	// Ask user to confirm vote based on selection
 	if (PartyVote[election] == "") {
@@ -111,8 +127,8 @@ function selectCard() {
 	// Get party variable
 	var $thisParty = $this.attr("id").slice(7);
 	// Add to vote (Find new solution)
-	PartyVote[$thisElection] = $thisParty;
-	CandidateVote[$thisElection] = "";
+	PartyVote = $thisParty;
+	CandidateVote = "";
 	
 	//1. No party was previously chosen, select $this party.
 	//2. A party was selected a second time, unselect $this party.
@@ -145,128 +161,128 @@ function selectCandidate() {
 	$(this).prop('checked', true);
 	// Get election variable
 	var	$thisElection = $this.attr("id").slice(5,6);
-	console.log($thisElection);
 	// Get card variable
 	var $thisParty = $this.attr("id").slice(7);
-	console.log($thisParty);
 	// Add to vote (Find new solution)
-	CandidateVote[$thisElection] = $thisParty;
+	CandidateVote = $thisParty;
 	console.log(CandidateVote);
 }
 
 function generateVoteView() {
-var html = "";
-html += "<div id='voteView'>";
-html += "<div class='election-header'>";
-html += "<h3 class='election-bar-text'>Information</h3>";
-html += "</div>";
-html += "<div id='info'>";
-html += "<div class='election-card-container'>";
-html += "<p>Via den internetbaserade röstningstjänsten har du möjlighet att lägga din röst för riksdagsvalet, kommunval och valet för landstingsfullmäktige.</p>";
-html += "<p>Din röst lägger du genom att välja ett parti och en kandidat och genomför röstningen genom att trycka på knappen 'Rösta'.</p>";
-html += "<p>Vill du rösta blankt eller bara på ett parti trycker du på knappen 'Rösta'.</p>";
-html += "<p>Din röst kan du ändra fram till och med... </p>";
-html += "<p>Logga ut när du har röstat färdigt.</p>";
-html += "</div>";
-html += "</div>";
-html += "<div class='election-header'>";
-html += "<h3 class='election-bar-text'>Riksdagsvalet 2018</h3>";
-html += "<img id='checkbox-0' class='checkbox hidden' src='media/checkboxicon.png'></img>";
-html += "</div>";
-html += "<div id='election-0'>";
-html += "<div id='election-card-container-0' class='election-card-container'>";
-html += "</div>";
-html += "<div id='candidate-list-0'></div>";
-html += "<a id='vote-0' class='btn btn-primary'>Rösta Riksdagsvalet</a> ";
-html += "</div>";
-html += "</div>";
-return html;
+	var html = "";
+	html += "<div id='voteView'>";
+	html += "<div class='election-header'>";
+	html += "<h3 class='election-bar-text'>Information</h3>";
+	html += "</div>";
+	html += "<div id='info'>";
+	html += "<div class='election-card-container'>";
+	html += "<p>Via den internetbaserade röstningstjänsten har du möjlighet att lägga din röst för riksdagsvalet, kommunval och valet för landstingsfullmäktige.</p>";
+	html += "<p>Din röst lägger du genom att välja ett parti och en kandidat och genomför röstningen genom att trycka på knappen 'Rösta'.</p>";
+	html += "<p>Vill du rösta blankt eller bara på ett parti trycker du på knappen 'Rösta'.</p>";
+	html += "<p>Din röst kan du ändra fram till och med... </p>";
+	html += "<p>Logga ut när du har röstat färdigt.</p>";
+	html += "</div>";
+	html += "</div>";
+	html += "<div class='election-header'>";
+	html += "<h3 class='election-bar-text'>Riksdagsvalet 2018</h3>";
+	html += "<img id='checkbox-0' class='checkbox hidden' src='media/checkboxicon.png'></img>";
+	html += "</div>";
+	html += "<div id='election-0'>";
+	html += "<div id='election-card-container-0' class='election-card-container'>";
+	html += "</div>";
+	html += "<div id='candidate-list-0'></div>";
+	html += "<a id='vote-0' class='btn btn-primary'>Rösta Riksdagsvalet</a> ";
+	html += "</div>";
+	html += "</div>";
+	return html;
 }
 
 function generateMyVoteView() {
-
+	var html = "";
+	html += "<div id='myVoteView'";
+	html += "</div>";
 }
 
 function generateResultView() {
-var html = "";
-html += "<div id='resultView'>";
+	var html = "";
+	html += "<div id='resultView'>";
 
-html += "<table class='table table-bordered'>";
-html += "<div class='table-responsive'>";
-html += "<thead>";
-html += "<tr>";
-html += "<th>Partier</th>";
-html += "<th>Röster</th>";
-html += "</tr>";
-html += "</thead>";
-html += "<tbody>";
-html += "<tr>";
-html += "<td>Moderaterna</td>";
-html += "<td id='candidate-1'></td>";
-html += "</tr>";
-html += "<tr>";
-html += "<td>Socialdemokraterna</td>";
-html += "<td id='candidate-2'></td>";
-html += "</tr>";
-html += "<tr>";
-html += "<td>Blankt</td>";
-html += "<td id='candidate-3'></td>";
-html += "</tr>";
-html += "</tbody>";
-html += "</table>";
-html += "</div>";
+	html += "<table class='table table-bordered'>";
+	html += "<div class='table-responsive'>";
+	html += "<thead>";
+	html += "<tr>";
+	html += "<th>Partier</th>";
+	html += "<th>Röster</th>";
+	html += "</tr>";
+	html += "</thead>";
+	html += "<tbody>";
+	html += "<tr>";
+	html += "<td>Moderaterna</td>";
+	html += "<td id='candidate-1'></td>";
+	html += "</tr>";
+	html += "<tr>";
+	html += "<td>Socialdemokraterna</td>";
+	html += "<td id='candidate-2'></td>";
+	html += "</tr>";
+	html += "<tr>";
+	html += "<td>Blankt</td>";
+	html += "<td id='candidate-3'></td>";
+	html += "</tr>";
+	html += "</tbody>";
+	html += "</table>";
+	html += "</div>";
 
 
-html += "<table class='table table-bordered'>";
-html += "<div class='table-responsive'>";
-html += "<thead>";
-html += "<tr>";
-html += "<th>Moderaterna: Kandidater</th>";
-html += "<th>Röster</th>";
-html += "</tr>";
-html += "</thead>";
-html += "<tbody>";
-html += "<tr>";
-html += "<td>Ulrika Karlsson, 41 år, riksdagsledamot, Uppsala</td>";
-html += "<td id='candidate-1'></td>";
-html += "</tr>";
-html += "<tr>";
-html += "<td>Jessika Vilhelmsson, 41 år, riksdagsledamot, Enköping</td>";
-html += "<td id='candidate-2'></td>";
-html += "</tr>";
-html += "<tr>";
-html += "<td>Per Bill, 56 år, riksdagsledamot, Uppsala</td>";
-html += "<td id='candidate-3'></td>";
-html += "</tr>";
-html += "</tbody>";
-html += "</table>";
-html += "</div>";
+	html += "<table class='table table-bordered'>";
+	html += "<div class='table-responsive'>";
+	html += "<thead>";
+	html += "<tr>";
+	html += "<th>Moderaterna: Kandidater</th>";
+	html += "<th>Röster</th>";
+	html += "</tr>";
+	html += "</thead>";
+	html += "<tbody>";
+	html += "<tr>";
+	html += "<td>Ulrika Karlsson, 41 år, riksdagsledamot, Uppsala</td>";
+	html += "<td id='candidate-1'></td>";
+	html += "</tr>";
+	html += "<tr>";
+	html += "<td>Jessika Vilhelmsson, 41 år, riksdagsledamot, Enköping</td>";
+	html += "<td id='candidate-2'></td>";
+	html += "</tr>";
+	html += "<tr>";
+	html += "<td>Per Bill, 56 år, riksdagsledamot, Uppsala</td>";
+	html += "<td id='candidate-3'></td>";
+	html += "</tr>";
+	html += "</tbody>";
+	html += "</table>";
+	html += "</div>";
 
-html += "<table class='table table-bordered'>";
-html += "<div class='table-responsive'>";
-html += "<thead>";
-html += "<tr>";
-html += "<th>Socialdemokraterna: Kandidater</th>";
-html += "<th>Röster</th>";
-html += "</tr>";
-html += "</thead>";
-html += "<tbody>";
-html += "<tr>";
-html += "<td>Ardalan Shekarabi, 35 år, Doktorand i offentlig rätt, Knivsta</td>";
-html += "<td id='candidate-1'></td>";
-html += "</tr>";
-html += "<tr>";
-html += "<td>Agneta Gille, 58 år, Barnskötare, Uppsala</td>";
-html += "<td id='candidate-2'></td>";
-html += "</tr>";
-html += "<tr>";
-html += "<td>Pyry Niemi, 49 år, Företagare, Bålsta</td>";
-html += "<td id='candidate-3'></td>";
-html += "</tr>";
-html += "</tbody>";
-html += "</table>";
-html += "</div>";
+	html += "<table class='table table-bordered'>";
+	html += "<div class='table-responsive'>";
+	html += "<thead>";
+	html += "<tr>";
+	html += "<th>Socialdemokraterna: Kandidater</th>";
+	html += "<th>Röster</th>";
+	html += "</tr>";
+	html += "</thead>";
+	html += "<tbody>";
+	html += "<tr>";
+	html += "<td>Ardalan Shekarabi, 35 år, Doktorand i offentlig rätt, Knivsta</td>";
+	html += "<td id='candidate-1'></td>";
+	html += "</tr>";
+	html += "<tr>";
+	html += "<td>Agneta Gille, 58 år, Barnskötare, Uppsala</td>";
+	html += "<td id='candidate-2'></td>";
+	html += "</tr>";
+	html += "<tr>";
+	html += "<td>Pyry Niemi, 49 år, Företagare, Bålsta</td>";
+	html += "<td id='candidate-3'></td>";
+	html += "</tr>";
+	html += "</tbody>";
+	html += "</table>";
+	html += "</div>";
 
-html += "</div>";
-return html;
+	html += "</div>";
+	return html;
 }
