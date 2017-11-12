@@ -12,6 +12,7 @@ var items;
 $.getJSON("candidates.json", function(data) {
 	items = [data];
 	console.log(items);
+	$("#showVoteView").addClass("active");
 	$("#content").html(generateVoteView());
 	$("#election-card-container-0").html(generatePartyCards(0));
 	//$("#election-card-container-1").html(generatePartyCards(1));
@@ -26,6 +27,8 @@ $.getJSON("candidates.json", function(data) {
 		$("#content").html(generateResultView);
 	});
 	$("#showVoteView").click(function(){
+		resetActiveCss();
+		$("#showVoteView").addClass("active");
 		$("#content").html(generateVoteView);
 		$("#election-card-container-0").html(generatePartyCards(0));
 		//$("#election-card-container-1").html(generatePartyCards(1));
@@ -35,14 +38,21 @@ $.getJSON("candidates.json", function(data) {
 		$("#vote-0").click(storeVote);
 	});
 	$("#showResultView").click(function(){
+		resetActiveCss();
+		$("#showResultView").addClass("active");
 		$("#content").html(generateResultView);
 	});
 	$("#showMyVoteView").click(function(){
+		resetActiveCss();
+		$("#showMyVoteView").addClass("active");
 		$("#content").html(generateMyVoteView);
 	});
 });
 //$("#content").html(generateVoteView());
 //Generate election 1
+function resetActiveCss() {
+	$(".active").removeClass("active");
+}
 
 
 function generateCandidateTable(election, party) {
