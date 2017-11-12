@@ -4,7 +4,10 @@ body {
   margin-top: 10%;
   font-family: "Open Sans", sans-serif;
 }
-
+#logo {
+  margin: 20px;
+  width:20%;
+}
 label {
   display: inline-block;
   width: 100px;
@@ -29,13 +32,13 @@ h1, h2 {
 }
 
 h2 {
-  color: #AAA;
+  color: #777;
   font-size: 32px;
 }
 
 h3 {
   font-weight: normal;
-  color: #AAA;
+  color: #777;
   font-size: 24px;
 }
 

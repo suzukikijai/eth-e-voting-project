@@ -1,0 +1,85 @@
+html {
+  height:100.1%;
+}
+#info, #election-0, #election-1, #election-2 {
+  width: 100%;
+  padding: 0 0px 25px 0px;
+  overflow:auto;
+  border: solid 1px #E7E7E7;
+  border-top: 0px;
+  margin-bottom:30px;
+}
+
+.election-header {
+  width: 100%;
+  height: 50px;
+  padding-left:2.5%;
+  background-color: #F8F8F8;
+  border: 1px solid #E7E7E7;
+}
+
+.election-bar-text {
+  color: #777;
+  margin-top: 12px;
+  text-align:center;
+  float:left;
+}
+
+.election-card-container {
+  width: 100%;
+  overflow: auto;
+  padding-left:2.5%; 
+  padding-right:2.5%;
+  padding-top:10px;
+}
+
+.checkbox {
+  height: 40px;
+  width: 40px;
+  left:30px;
+  top: -5px;
+}
+
+.cand-cb {
+  float:right;
+  height:15px;
+  width:15px;
+  top:-20px;
+}
+
+.election-card {
+  width: 200px;
+  height: 200px;
+  background-color:#F8F8F8; /* #D5D5D5; */
+  margin: 8px;
+  float:left;
+  border: solid 1px #E7E7E7;
+}
+.election-card > *{
+  text-align:center;
+}
+
+.election-card:hover {
+  background-color: #D5D5D5;
+  border: solid 1px #E7E7E7;
+}
+
+.selected-card {
+  background-color: #D5D5D5;
+  border: solid 1px #999;
+}
+
+.selected-card:hover {
+  background-color: #D5D5D5;
+  border: solid 1px #999;
+}
+
+.btn {
+  margin:20px;
+}
+
+#vote-0, #vote-1, #vote-2 {
+  clear:both;
+  margin: 15px 0 0 3.5%;
+}
+

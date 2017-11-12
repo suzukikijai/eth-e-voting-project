@@ -14,8 +14,9 @@ contract Ballot {
     // This is a type for a single proposal.
     struct Proposal {
         bytes32 party;   // short name (up to 32 bytes)
-        uint voteCount; // number of accumulated votes
+        uint partyVoteCount; // number of accumulated votes
         bytes32 candidateName;
+        uint candidateVoteCount;
     }
 
     address public chairperson;
@@ -44,7 +45,8 @@ contract Ballot {
             // appends it to the end of `proposals`.
             proposals.push(Proposal({
                 candidateName: proposalNames[i],
-                voteCount: 0,
+                candidateVoteCount: 0,
+                partyVoteCount: 0,
                 party: "sossarna" // FIX PARTY 
             }));
         }
@@ -72,13 +74,13 @@ contract Ballot {
 
     /// Give your vote (including votes delegated to you)
     /// to proposal `proposals[proposal].name`.
-    function vote(uint proposal) {
+    function vote(uint proposal , uint candidate) {
         // Check if election is still active 
         require(electionHasStarted);
         require(now < electionEndTime);
 
             Voter storage sender = voters[msg.sender];
-            require(!sender.voted);
+            //require(!sender.voted); INCLUDE AFTER AUTHORIZING VOTERS 
         
             sender.voted = true;
             sender.vote = proposal;

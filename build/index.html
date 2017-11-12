@@ -3,40 +3,82 @@
 <head>
   <title>Valet 2018</title>
   <meta charset="utf-8"/>
-  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="stylesheets/app.css">
+  <link rel="stylesheet" type="text/css" href="stylesheets/election.css">
+  <script src="./app.js"></script>
   <link href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' rel='stylesheet' type='text/css'>
   <script src="https://cdn.rawgit.com/ethereum/web3.js/develop/dist/web3.js"></script>
-  <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"></script>
-  <script src="./app.js"></script>
 </head>
 <body class="container">
-  <h1>Riksdagsvalet 2018</h1>
-  <p>Powered by ethereum.</p>
-  <div class="table-responsive">
-    <table class="table table-bordered">
-      <thead>
-        <tr>
-          <th>Kandidater</th>
-          <th>Röster</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Rama</td>
-          <td id="candidate-1"></td>
-        </tr>
-        <tr>
-          <td>Nick</td>
-          <td id="candidate-2"></td>
-        </tr>
-        <tr>
-          <td>Jose</td>
-          <td id="candidate-3"></td>
-        </tr>
-      </tbody>
-    </table>
+  <img id="logo" src="media/riksdagen-logo.svg" width="20%" style="background-size: 50px 50px;"></img>
+  <!-- <h1>Riksdagsvalet 2018</h1> -->
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+      </div>
+      <ul class="nav navbar-nav">
+        <li><a id="showVoteView" href="#">Rösta</a></li>
+        <li><a id="showMyVoteView" href="#">Min röst</a></li>
+        <li><a id="showResultView" href="#">Valresultat</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="login.html"><span class="glyphicon glyphicon-log-in"></span> Logga ut</a></li>
+      </ul>
+    </div>
+  </nav>
+  <div id="content"></div>
+<!--
+  <div class="election-header">
+    <h3 class="election-bar-text">Information</h3>
   </div>
-  <input type="text" id="candidate" />
-  <a href="#" id="vote" class="btn btn-primary">Rösta</a>
+  <div id="info">
+    <div class="election-card-container">
+      <p>Via den internetbaserade röstningstjänsten har du möjlighet att lägga din röst för riksdagsvalet, kommunval och valet för landstingsfullmäktige.</p>
+      <p>Din röst lägger du genom att välja ett parti och en kandidat och genomför röstningen genom att trycka på knappen "Rösta".</p>
+      <p>Vill du rösta blankt eller bara på ett parti trycker du på knappen "Rösta".</p>
+      <p>Din röst kan du ändra fram till och med... </p>
+      <p>Logga ut när du har röstat färdigt.</p>
+    </div>
+  </div>
+
+  <div class="election-header">
+    <h3 class="election-bar-text">Riksdagsvalet 2018</h3>
+    <img id="checkbox-0" class="checkbox hidden" src="media/checkboxicon.png"></img>
+  </div>
+  <div id="election-0">
+      <div id="election-card-container-0" class="election-card-container">
+      </div>
+      <div id="candidate-list-0"></div>
+      <a id="vote-0" class="btn btn-primary">Rösta Riksdagsvalet</a> 
+  </div>
+  <div class="election-header">
+    <h3 class="election-bar-text">Landstingsfullmäktige 2018</h3>
+    <img id="checkbox-1" class="checkbox hidden" src="media/checkboxicon.png"></img>
+  </div>
+  <div id="election-1">
+      <div id="election-card-container-1" class="election-card-container">
+      </div>
+      <div id="candidate-list-1"></div>
+      <a id="vote-1" class="btn btn-primary">Rösta Landstingsfullmäktige</a> 
+  </div>
+
+  <div class="election-header">
+    <h3 class="election-bar-text">Kommunfullmäktige 2018</h3>
+    <img id="checkbox-2" class="checkbox hidden" src="media/checkboxicon.png"></img>
+  </div>
+  <div id="election-2">
+      <div id="election-card-container-2" class="election-card-container">
+      </div>
+      <div id="candidate-list-2"></div>
+      <a id="vote-2" class="btn btn-primary">Rösta Kommunfullmäktige</a> 
+  </div>
+  
+    Skriv om den här knappen för att skapa blocket etc.
+
+    <input type="text" id="candidate" />
+    <a href="#" id="vote" class="btn btn-primary">Rösta</a>
+-->
+  
 </body>
 </html>
