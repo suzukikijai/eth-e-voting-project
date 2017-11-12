@@ -14,23 +14,23 @@ var items;
 	//$("#vote-1").click(storeVote);
 	//$("#vote-2").click(storeVote);
 
-/*	#Loading all content and relying on hiding instead of updating.
-		#This will make it so that the user cannot vote again.
-	
-		$("#concent").addClass("hidden");
-		$("#content").html(generateVoteView);
-		$("#election-card-container-0").html(generatePartyCards(0));
-		$(".election-card").click(selectCard);
-		$(".cand-cb").click(selectCandidate);
-		$("#vote-0").click(storeVote);
+/*#Loading all content to rely on hiding instead of updating.
+	#The user cannot vote again.
 
-		$("#content").html(generateResultView);
-		$("#resultView").addClass("hidden");
+	$("#concent").addClass("hidden");
+	$("#content").html(generateVoteView);
+	$("#election-card-container-0").html(generatePartyCards(0));
+	$(".election-card").click(selectCard);
+	$(".cand-cb").click(selectCandidate);
+	$("#vote-0").click(storeVote);
 
-		$("#content").html(generateMyVoteView);
-		$("#myVoteView").addClass("hidden");
+	$("#content").html(generateResultView);
+	$("#resultView").addClass("hidden");
 
-		$("#content").removeClass("hidden");
+	$("#content").html(generateMyVoteView);
+	$("#myVoteView").addClass("hidden");
+
+	$("#content").removeClass("hidden");
 */
 
 // Onload
@@ -119,7 +119,6 @@ function storeVote(){
 	}
 };
 
-
 function selectCard() {
 	var $this = $(this);
 	// Get election variable
@@ -128,6 +127,7 @@ function selectCard() {
 	var $thisParty = $this.attr("id").slice(7);
 	// Add to vote (Find new solution)
 	PartyVote = $thisParty;
+	// Reset the candidate vote when card is selected
 	CandidateVote = "";
 	
 	//1. No party was previously chosen, select $this party.
@@ -137,10 +137,10 @@ function selectCard() {
 	if (!$(".selected-card")[0]){
 		$this.addClass("selected-card");
 		$( "#candidate-list-"+$thisElection ).html(generateCandidateTable($thisElection, $thisParty));
-		$(".cand-cb").click(selectCandidate); //försvinner de sen?
+		$(".cand-cb").click(selectCandidate); 
 	}
 	else if ($this.hasClass("selected-card")) {
-		PartyVote[$thisElection] = "";
+		PartyVote = "";
 		$( "#candidate-list-"+$thisElection ).html("");
 		$(".selected-card").removeClass("selected-card");
 	}
@@ -156,16 +156,25 @@ function selectCard() {
 };
 
 function selectCandidate() {
-	$(".cand-cb").prop('checked', false);
 	var $this = $(this);
-	$(this).prop('checked', true);
-	// Get election variable
-	var	$thisElection = $this.attr("id").slice(5,6);
-	// Get card variable
-	var $thisParty = $this.attr("id").slice(7);
-	// Add to vote (Find new solution)
-	CandidateVote = $thisParty;
-	console.log(CandidateVote);
+	
+	// If the checkbox is already selected, unselect and reset choice.
+	if (!$(this).prop("checked")) {
+		$(".cand-cb").prop('checked', false);
+		//$(this).prop('checked', true);
+		CandidateVote = "";
+		console.log(CandidateVote);
+	}
+	// If the checkbox is unselected, select and add choice.
+	else {
+		// Get candidate variable
+		var $thisCandidate = $this.attr("id").slice(7);
+
+		$(".cand-cb").prop('checked', false);
+		$(this).prop('checked', true);
+		CandidateVote = $thisCandidate;
+		console.log(CandidateVote);
+	}
 }
 
 function generateVoteView() {
