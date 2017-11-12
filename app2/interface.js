@@ -43,9 +43,7 @@ $.getJSON("candidates.json", function(data) {
 	$(".election-card").click(selectCard);
 	$(".cand-cb").click(selectCandidate);
 	$("#vote-0").click(storeVote);
-	$("#showResultView").click(function(){
-		$("#content").html(generateResultView);
-	});
+	
 	$("#showVoteView").click(function(){
 		resetActiveCss();
 		$("#showVoteView").addClass("active");
@@ -55,11 +53,13 @@ $.getJSON("candidates.json", function(data) {
 		$(".cand-cb").click(selectCandidate);
 		$("#vote-0").click(storeVote);
 	});
+	
 	$("#showResultView").click(function(){
 		resetActiveCss();
 		$("#showResultView").addClass("active");
 		$("#content").html(generateResultView);
 	});
+
 	$("#showMyVoteView").click(function(){
 		resetActiveCss();
 		$("#showMyVoteView").addClass("active");
@@ -102,14 +102,14 @@ function storeVote(){
 	var userConfirm = false;
 
 	// Ask user to confirm vote based on selection
-	if (PartyVote[election] == "") {
+	if (PartyVote == "") {
 		userConfirm =	confirm(items[0][election].election + ":\nDu har valt att rösta blankt.\n\nTryck på avbryt för att göra om.");
 	}
-	if (CandidateVote[election] == "" && userConfirm == false) {
-		userConfirm = confirm(items[0][election].election + ":\nDin röst kommer att bli registrerad med: \n\nParti:" + items[0][election].parties[PartyVote[election]].party + ".\nPartikandidat: Blankt\nTryck på avbryt för att göra om.");
+	else if (CandidateVote == "" && userConfirm == false) {
+		userConfirm = confirm(items[0][election].election + ":\nDin röst kommer att bli registrerad med: \n\nParti:" + items[0][election].parties[PartyVote].party + ".\nPartikandidat: Blankt\nTryck på avbryt för att göra om.");
 	}
 	else if (userConfirm == false) {
-		userConfirm = confirm(items[0][election].election + ":\nDin röst kommer att bli registrerad med: \n\nParti: " + items[0][election].parties[PartyVote[election]].party + ".\nPartikandidat: " +items[0][election].parties[PartyVote[election]].candidates[CandidateVote[election]] + "\n\nTryck på avbryt för att göra om.");
+		userConfirm = confirm(items[0][election].election + ":\nDin röst kommer att bli registrerad med: \n\nParti: " + items[0][election].parties[PartyVote].party + ".\nPartikandidat: " +items[0][election].parties[PartyVote].candidates[CandidateVote] + "\n\nTryck på avbryt för att göra om.");
 	}
 	if (userConfirm) {
 		$('#checkbox-'+election).removeClass("hidden");
