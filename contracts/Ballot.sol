@@ -8,13 +8,17 @@ contract Ballot {
     struct Voter {
         uint weight; // weight is accumulated by delegation
         bool voted;  // if true, that person already voted
-        uint vote;   // index of the voted proposal
+        uint votedParty;   // index of the voted proposal
+        uint votedCandidate;
     }
 
     // This is a type for a single proposal.
-    struct Proposal {
-        bytes32 party;   // short name (up to 32 bytes)
+    struct Party {
+        bytes32 partyName;   // short name (up to 32 bytes)
         uint partyVoteCount; // number of accumulated votes
+    }
+
+    struct Candidate {
         bytes32 candidateName;
         uint candidateVoteCount;
     }
@@ -28,26 +32,31 @@ contract Ballot {
     // stores a `Voter` struct for each possible address.
     mapping(address => Voter) public voters;
 
-    // A dynamically-sized array of `Proposal` structs.
-    Proposal[] public proposals;
+    // A dynamically-sized array of structs.
+    Party[] public parties;
+    Candidate[] public candidates;
 
     /// Create a new ballot to choose one of `proposalNames`.
-    function Ballot(bytes32[] proposalNames) {
+    function Ballot(bytes32[] partyNames, bytes32[] candidateNames) {
         chairperson = msg.sender;
         voters[chairperson].weight = 1;
 
         // For each of the provided proposal names,
         // create a new proposal object and add it
         // to the end of the array.
-        for (uint i = 0; i < proposalNames.length; i++) {
+        for (uint i = 0; i < partyNames.length; i++) {
             // `Proposal({...})` creates a temporary
             // Proposal object and `proposals.push(...)`
             // appends it to the end of `proposals`.
-            proposals.push(Proposal({
-                candidateName: proposalNames[i],
-                candidateVoteCount: 0,
-                partyVoteCount: 0,
-                party: "sossarna" // FIX PARTY 
+            parties.push(Party({
+                partyName: partyNames[i],
+                partyVoteCount: 0
+            }));
+        }
+        for (uint j = 0; j < candidateNames.length; j++) {  
+            candidates.push(Candidate({
+                candidateName: candidateNames[j],
+                candidateVoteCount: 0
             }));
         }
     }
@@ -59,10 +68,16 @@ contract Ballot {
     }
 
     // This function returns the total votes a candidate has received so far
-    function totalVotesFor(uint proposal) returns (uint numberOfVotes) {
-        require(electionHasStarted);
-        require(now > electionEndTime);
-        numberOfVotes = proposals[proposal].voteCount;
+    function totalVotesForParty(uint party) returns (uint numberOfVotes) {
+        //require(electionHasStarted);
+        //require(now > electionEndTime);
+        numberOfVotes = parties[party].partyVoteCount;
+    }
+    // This function returns the total votes a candidate has received so far
+    function totalVotesForCandidate(uint candidate) returns (uint numberOfVotes) {
+        //require(electionHasStarted);
+        //require(now > electionEndTime);
+        numberOfVotes = candidates[candidate].candidateVoteCount;
     }
 
     // Give `voter` the right to vote on this ballot.
@@ -74,83 +89,60 @@ contract Ballot {
 
     /// Give your vote (including votes delegated to you)
     /// to proposal `proposals[proposal].name`.
-    function vote(uint proposal , uint candidate) {
+    function vote(uint party, uint candidate) {
         // Check if election is still active 
-        require(electionHasStarted);
-        require(now < electionEndTime);
-
+        //require(electionHasStarted);
+        //require(now < electionEndTime);
             Voter storage sender = voters[msg.sender];
             //require(!sender.voted); INCLUDE AFTER AUTHORIZING VOTERS 
-        
-            sender.voted = true;
-            sender.vote = proposal;
+            if (voters[msg.sender].voted) { 
+                // Deduct the old vote 
+                parties[sender.votedParty].partyVoteCount -= sender.weight;
+                candidates[sender.votedCandidate].candidateVoteCount -= sender.weight;
+                // Add the new vote 
+                voters[msg.sender].votedParty = party;
+                voters[msg.sender].votedCandidate = candidate;
+                parties[party].partyVoteCount += sender.weight;
+                candidates[candidate].candidateVoteCount += sender.weight;
+            } else {
+                sender.weight = 1;
+                sender.voted = true;
+                sender.votedParty = party;
+                sender.votedCandidate = candidate;
 
-            // If `proposal` is out of the range of the array,
-            // this will throw automatically and revert all
-            // changes.
-            proposals[proposal].voteCount += sender.weight;
+                // If `proposal` is out of the range of the array,
+                // this will throw automatically and revert all
+                // changes.
+                parties[party].partyVoteCount += sender.weight;
+                candidates[candidate].candidateVoteCount += sender.weight;
+            }
     }
 
     // Return the vote  -- should only be called by voter
-    function getVotersVote(address voterAddress) constant // constant == read-only 
-            returns (bytes32 proposalTitle)
+    function getVotersPartyVote() constant // constant == read-only 
+            returns (bytes32 partyTitle)
     {   
+
         // require(msg.sender = voteraddress);
-        uint votedVote = voters[voterAddress].vote;
-        proposalTitle = proposals[votedVote].candidateName;
+        uint votedPartyVote = voters[msg.sender].votedParty;
+        partyTitle = parties[votedPartyVote].partyName;
     }
 
-
-    /// @dev Computes the winning proposal taking all
-    /// previous votes into account.
-    function winningProposal() constant
-            returns (uint winner)
-    {
-        uint winningVoteCount = 0;
-        for (uint p = 0; p < proposals.length; p++) {
-            if (proposals[p].voteCount > winningVoteCount) {
-                winningVoteCount = proposals[p].voteCount;
-                winner = p;
-            }
-        }
-    }
-
-    // Calls winningProposal() function to get the index
-    // of the winner contained in the proposals array and then
-    // returns the name of the winner
-    function winnerName()
-            returns (bytes32 winnerTitle)
+    function getVotersCandidateVote() constant // constant == read-only 
+            returns (bytes32 candidateTitle)
     {   
-        require(electionHasStarted);
-        require(now > electionEndTime);
-        winnerTitle = proposals[winningProposal()].candidateName;
+        Voter storage sender = voters[msg.sender];
+        // require(msg.sender = voteraddress);
+        uint votedCandidateVote = voters[msg.sender].votedCandidate;
+        candidateTitle = candidates[votedCandidateVote].candidateName;
     }
 
-    // Function to change a vote already casted 
-    function changeVotersVote(uint proposal) {
-        
-        require(electionHasStarted);
-        require(now < electionEndTime);
-        Voter storage sender = voters[msg.sender];
-        // Check that a vote already exists 
-        require(sender.voted);
-        // Deduct the old vote 
-        proposals[sender.vote].voteCount -= 1;
-        // Add the new vote 
-        sender.vote = proposal;
-        proposals[proposal].voteCount += 1; 
-    }
 
     // Function removes vote to be called when they casted it live instead  
     // NOT TESTED! 
-    function removeVotersVote(address voter) {
-        Voter storage sender = voters[voter];
-        proposals[sender.vote].voteCount -= 1;
-        delete voters[voter];
-    }
-    // Dummy function just to get a new block for correct timestamp 
-    // REMOVE - when launched on testnet
-    function updateBlockNo(uint no) {
-        blockNo = no;
-    }
+    //function removeVotersVote(address voter) {
+      //  Voter storage sender = voters[voter];
+        //proposals[sender.vote].voteCount -= 1;
+        //delete voters[voter];
+   // }
 }

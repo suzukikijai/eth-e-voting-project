@@ -109,7 +109,6 @@ $( "#results" ).click(function(){
   Ballot.deployed().then(function(contractInstance){
     // Get number of votes of candidate 
     let candidateNames = Object.keys(candidates);
-    let sortedVotes;
     for (var i = 0; i < candidateNames.length; i++) {
       let name = candidateNames[i];
       contractInstance.totalVotesFor.call(i + 1).then(function(numberOfVotes) {

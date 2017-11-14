@@ -52,12 +52,14 @@ $(function() {
 		resetActiveCss();
 		$("#showResultView").addClass("active");
 		$("#content").html(generateResultView);
+		generateResultTable();
 	});
 
 	$("#showMyVoteView").click(function(){
 		resetActiveCss();
 		$("#showMyVoteView").addClass("active");
 		$("#content").html(generateMyVoteView);
+		$("#usersVote").click(getUsersVotes);
 	});
 
 	if (typeof web3 !== 'undefined') {
@@ -72,6 +74,8 @@ $(function() {
 
 	// From apporg
   Ballot.setProvider(web3.currentProvider);
+  web3.eth.defaultAccount = web3.eth.accounts[0];
+  
 });
 //$("#content").html(generateVoteView());
 //Generate election 1
@@ -80,8 +84,6 @@ $(function() {
 function resetActiveCss() {
 	$(".active").removeClass("active");
 }
-
-
 
 function generateCandidateTable(election, party) {
 	var candidateTable = "<div class='table-responsive'><table class='table table-bordered'><thead><tr><th><h4>"+ items[0][election].parties[party].party+"</h4></th></tr></thead><tbody>";
@@ -104,7 +106,21 @@ function generatePartyCards(election) {
 }
 
 function generateResultTable() {
-
+	Ballot.deployed().then(function(contractInstance){
+		for (let i = 0; i < 3; i++) {
+			contractInstance.totalVotesForParty.call(i).then(function(numberOfVotes) {
+			  console.log(i + "  " + numberOfVotes);
+			   $("#party-" + (i + 1)).html(numberOfVotes.toString());
+			});
+		  }
+		// Get number of votes of candidate 
+		for (let i = 1; i < 7; i++) {
+		  contractInstance.totalVotesForCandidate.call(i).then(function(numberOfVotes) {
+			console.log(i + "  " + numberOfVotes);
+			 $("#candidate-" + i).html(numberOfVotes.toString());
+		  });
+		}
+		});
 }
 
 
@@ -124,11 +140,17 @@ function storeVote(){
 		userConfirm = confirm(items[0][election].election + ":\nDin röst kommer att bli registrerad med: \n\nParti: " + items[0][election].parties[PartyVote].party + ".\nPartikandidat: " +items[0][election].parties[PartyVote].candidates[CandidateVote] + "\n\nTryck på avbryt för att göra om.");
 	}
 	if (userConfirm) {
+		var intParty = parseInt(PartyVote);
+		var intCandidate = parseInt(CandidateVote);
+		
 
+		if (intParty == 1){
+			intCandidate += 3; 
+		}
 		// Add vote to block 
-		web3.eth.defaultAccount = web3.eth.accounts[0];
-		Ballot.deployed().then(function(contractInstance){	
-			contractInstance.vote(PartyVote + 1); // Change to real candidate
+
+		Ballot.deployed().then(function(contractInstance){
+			contractInstance.vote(intParty + 1, intCandidate + 1, {gas: 400000, from: web3.eth.defaultAccount} );
 		});
 		$('#checkbox-'+election).removeClass("hidden");
 		$('#election-'+election).slideUp("normal");
@@ -137,7 +159,17 @@ function storeVote(){
 	}
 };
 
-
+function getUsersVotes(){
+	// Add vote to block 
+    Ballot.deployed().then(function(contractInstance){
+		// Get a specific users vote by address -- change from input to automaticly use sender address 
+		contractInstance.getVotersPartyVote.call({from: web3.eth.defaultAccount}).then(function(partyTitle){
+			contractInstance.getVotersCandidateVote.call({from: web3.eth.defaultAccount}).then(function(candidateTitle){
+				$("#userVote").html(web3.toAscii(partyTitle) + " /  " +  web3.toAscii(candidateTitle));
+			});
+		});
+	});
+}
 
 function selectCard() {
 	var $this = $(this);
@@ -199,19 +231,6 @@ function selectCandidate() {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 function generateVoteView() {
 var html = "";
 html += "<div id='voteView'>";
@@ -220,11 +239,13 @@ html += "<h3 class='election-bar-text'>Information</h3>";
 html += "</div>";
 html += "<div id='info'>";
 html += "<div class='election-card-container'>";
-html += "<p>Via den internetbaserade röstningstjänsten har du möjlighet att lägga din röst för riksdagsvalet, kommunval och valet för landstingsfullmäktige.</p>";
+html += "<p>Via den internetbaserade röstningstjänsten har du möjlighet att lägga din röst för riksdagsvalet.</p>";
+html += "<p>Kombinera din säkerhetsfras du fått via post med denna fras för att få tillgång till din röstningsplånbok.</p>"
+html += "<p><b>ask category tunnel picture kit broccol</b></p>"
 html += "<p>Din röst lägger du genom att välja ett parti och en kandidat och genomför röstningen genom att trycka på knappen 'Rösta'.</p>";
 html += "<p>Vill du rösta blankt eller bara på ett parti trycker du på knappen 'Rösta'.</p>";
-html += "<p>Din röst kan du ändra fram till och med... </p>";
-html += "<p>Logga ut när du har röstat färdigt.</p>";
+html += "<p>Bekräfta att du har valt rätt parti och kandidat och skicka sedan på den gröna Submit-knappen för att lagra din röst.</p>"
+html += "<p>Din röst kan du ändra fram till kl 23:59 den 14 september 2018</p>";
 html += "</div>";
 html += "</div>";
 html += "<div class='election-header'>";
@@ -244,9 +265,19 @@ return html;
 function generateMyVoteView() {
 var html = "";
 html += "<div id='myVoteView'>";
+html += "<div class='election-header'>";
+html += "<h3 class='election-bar-text'>Min Röst</h3>";
+html += "</div>";
+html += "<div id='info'>";
+html += "<div class='election-card-container'>";
+html += "<p>Genom att hämta din röst så kan du säkerställa att den är intakt och att din röst har gått till det parti och kandidat du tänkt rösta på.</p>";
+html += "<p>Din röst kan du ändra genom att lägga en ny röst sålänge röstningsperioden är öppen. </p>";
+html += "</div>";
+html += "</div>";
 html += "<a href='#' id='usersVote' class='btn btn-primary'>Hämta din röst</a>";
+html += "<p></p>"
 html += "<div class='well well-sm'>";
-html += "<p>Din röst:</p>";
+html += "<p>Din röst (Parti / Kandidat):</p>";
 html += "<p id='userVote'></p>";
 html += "</div>"
 html += "</div>";
@@ -256,7 +287,14 @@ return html;
 function generateResultView() {
 var html = "";
 html += "<div id='resultView'>";
-
+html += "<div class='election-header'>";
+html += "<h3 class='election-bar-text'>Valresultat</h3>";
+html += "</div>";
+html += "<div id='info'>";
+html += "<div class='election-card-container'>";
+html += "<p>När röstningsperioden är över kan du direkt på den här sidan se valresultatet då detta sammanställs automatiskt utan behovet av en rösträknare.</p>";
+html += "</div>";
+html += "</div>";
 html += "<table class='table table-bordered'>";
 html += "<div class='table-responsive'>";
 html += "<thead>";
@@ -267,16 +305,16 @@ html += "</tr>";
 html += "</thead>";
 html += "<tbody>";
 html += "<tr>";
+html += "<td>Blankt</td>";
+html += "<td id='party-1'></td>";
+html += "</tr>";
+html += "<tr>";
 html += "<td>Moderaterna</td>";
-html += "<td id='candidate-1'></td>";
+html += "<td id='party-2'></td>";
 html += "</tr>";
 html += "<tr>";
 html += "<td>Socialdemokraterna</td>";
-html += "<td id='candidate-2'></td>";
-html += "</tr>";
-html += "<tr>";
-html += "<td>Blankt</td>";
-html += "<td id='candidate-3'></td>";
+html += "<td id='party-3'></td>";
 html += "</tr>";
 html += "</tbody>";
 html += "</table>";
@@ -319,15 +357,15 @@ html += "</thead>";
 html += "<tbody>";
 html += "<tr>";
 html += "<td>Ardalan Shekarabi, 35 år, Doktorand i offentlig rätt, Knivsta</td>";
-html += "<td id='candidate-1'></td>";
+html += "<td id='candidate-4'></td>";
 html += "</tr>";
 html += "<tr>";
 html += "<td>Agneta Gille, 58 år, Barnskötare, Uppsala</td>";
-html += "<td id='candidate-2'></td>";
+html += "<td id='candidate-5'></td>";
 html += "</tr>";
 html += "<tr>";
 html += "<td>Pyry Niemi, 49 år, Företagare, Bålsta</td>";
-html += "<td id='candidate-3'></td>";
+html += "<td id='candidate-6'></td>";
 html += "</tr>";
 html += "</tbody>";
 html += "</table>";
