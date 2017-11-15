@@ -239,15 +239,26 @@ html += "<h3 class='election-bar-text'>Information</h3>";
 html += "</div>";
 html += "<div id='info'>";
 html += "<div class='election-card-container'>";
-html += "<p>Via den internetbaserade röstningstjänsten har du möjlighet att lägga din röst för riksdagsvalet.</p>";
-html += "<p>Kombinera din säkerhetsfras du fått via post med denna fras för att få tillgång till din röstningsplånbok.</p>"
-html += "<p><b> hollow hat clip need hotel cupboard</b></p>"
-html += "<p>Din röst lägger du genom att välja ett parti och en kandidat och genomför röstningen genom att trycka på knappen 'Rösta'.</p>";
-html += "<p>Vill du rösta blankt eller bara på ett parti trycker du på knappen 'Rösta'.</p>";
-html += "<p>Bekräfta att du har valt rätt parti och kandidat och skicka sedan på den gröna Submit-knappen för att lagra din röst.</p>"
+html += "<p>Via den internetbaserade röstningstjänsten har du möjlighet att rösta i riksdagsvalet.</p>";
+html += "<p>Kombinera din säkerhetsfras du fått via post med nedanstående fras för att få tillgång till din röstningsplånbok.</p>";
+//html += "<p><b> hollow hat clip need hotel cupboard</b></p>"
+html += "<p>Välj parti och kandidat och tryck på rösta.</p>";
+html += "<p>Bekräfta din röst genom att trycka på den gröna Submit-knappen i pop-up-fönstret.</p>";
 html += "<p>Din röst kan du ändra fram till kl 23:59 den 14 september 2018</p>";
 html += "</div>";
 html += "</div>";
+
+html += "<div class='election-header'>";
+html += "<h3 class='election-bar-text'>Inloggningskod</h3>";
+html += "</div>";
+html += "<div id='info'>";
+html += "<div class='election-card-container'>";
+html += "<h2>ROOKIE SHIELD THRIVE ORIGINAL WHALE CAN</h2>";
+html += "<p>";
+html += "<p>Koden ovan är del två av din säkerhetsfras.</p>";
+html += "</div>";
+html += "</div>";
+
 html += "<div class='election-header'>";
 html += "<h3 class='election-bar-text'>Riksdagsvalet 2018</h3>";
 html += "<img id='checkbox-0' class='checkbox hidden' src='media/checkboxicon.png'></img>";
