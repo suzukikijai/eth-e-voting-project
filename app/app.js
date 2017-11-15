@@ -241,7 +241,7 @@ html += "<div id='info'>";
 html += "<div class='election-card-container'>";
 html += "<p>Via den internetbaserade röstningstjänsten har du möjlighet att lägga din röst för riksdagsvalet.</p>";
 html += "<p>Kombinera din säkerhetsfras du fått via post med denna fras för att få tillgång till din röstningsplånbok.</p>"
-html += "<p><b>ask category tunnel picture kit broccol</b></p>"
+html += "<p><b> hollow hat clip need hotel cupboard</b></p>"
 html += "<p>Din röst lägger du genom att välja ett parti och en kandidat och genomför röstningen genom att trycka på knappen 'Rösta'.</p>";
 html += "<p>Vill du rösta blankt eller bara på ett parti trycker du på knappen 'Rösta'.</p>";
 html += "<p>Bekräfta att du har valt rätt parti och kandidat och skicka sedan på den gröna Submit-knappen för att lagra din röst.</p>"
