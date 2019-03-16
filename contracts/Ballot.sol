@@ -1,4 +1,4 @@
-pragma solidity ^0.4.11;
+pragma experimental ABIEncoderV2;
 
 /// @title Voting with delegation.
 contract Ballot {
@@ -14,12 +14,12 @@ contract Ballot {
 
     // This is a type for a single proposal.
     struct Party {
-        bytes32 partyName;   // short name (up to 32 bytes)
+        string partyName;   // short name (up to 32 bytes)
         uint partyVoteCount; // number of accumulated votes
     }
 
     struct Candidate {
-        bytes32 candidateName;
+        string candidateName;
         uint candidateVoteCount;
     }
 
@@ -37,7 +37,7 @@ contract Ballot {
     Candidate[] public candidates;
 
     /// Create a new ballot to choose one of `proposalNames`.
-    function Ballot(bytes32[] partyNames, bytes32[] candidateNames) {
+    constructor(string[] memory partyNames, string[] memory candidateNames)public {
         chairperson = msg.sender;
         voters[chairperson].weight = 1;
 
@@ -61,20 +61,20 @@ contract Ballot {
         }
     }
     // Function to start an election by setting end time in epoch-seconds
-    function startElection(uint duration) {
+    function startElection(uint duration)public {
         require(msg.sender == chairperson);
         electionEndTime = block.timestamp + duration;
         electionHasStarted = true;
     }
 
     // This function returns the total votes a candidate has received so far
-    function totalVotesForParty(uint party) returns (uint numberOfVotes) {
+    function totalVotesForParty(uint party)public returns (uint numberOfVotes) {
         //require(electionHasStarted);
         //require(now > electionEndTime);
         numberOfVotes = parties[party].partyVoteCount;
     }
     // This function returns the total votes a candidate has received so far
-    function totalVotesForCandidate(uint candidate) returns (uint numberOfVotes) {
+    function totalVotesForCandidate(uint candidate)public returns (uint numberOfVotes) {
         //require(electionHasStarted);
         //require(now > electionEndTime);
         numberOfVotes = candidates[candidate].candidateVoteCount;
@@ -82,14 +82,14 @@ contract Ballot {
 
     // Give `voter` the right to vote on this ballot.
     // Hardcode addresses before election 
-    function giveRightToVote(address voter) {
+    function giveRightToVote(address voter)public {
         require((msg.sender == chairperson) && !voters[voter].voted && (voters[voter].weight == 0));
         voters[voter].weight = 1;
     }
 
     /// Give your vote (including votes delegated to you)
     /// to proposal `proposals[proposal].name`.
-    function vote(uint party, uint candidate) {
+    function vote(uint party, uint candidate)public {
         // Check if election is still active 
         //require(electionHasStarted);
         //require(now < electionEndTime);
@@ -119,8 +119,8 @@ contract Ballot {
     }
 
     // Return the vote  -- should only be called by voter
-    function getVotersPartyVote() constant // constant == read-only 
-            returns (bytes32 partyTitle)
+    function getVotersPartyVote()public view // pure == read-only 
+            returns (string memory partyTitle)
     {   
 
         // require(msg.sender = voteraddress);
@@ -128,8 +128,8 @@ contract Ballot {
         partyTitle = parties[votedPartyVote].partyName;
     }
 
-    function getVotersCandidateVote() constant // constant == read-only 
-            returns (bytes32 candidateTitle)
+    function getVotersCandidateVote()public view // pure == read-only 
+            returns (string memory candidateTitle)
     {   
         Voter storage sender = voters[msg.sender];
         // require(msg.sender = voteraddress);
